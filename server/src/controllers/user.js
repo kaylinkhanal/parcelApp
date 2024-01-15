@@ -4,4 +4,4 @@ const registerNewUser = (req,res)=>{
     })
 }
 
-module.exports= registerNewUser
+module.exports= {registerNewUser}

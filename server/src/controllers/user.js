@@ -1,7 +1,7 @@
-const registerNewUser = (req,res)=>{
+const registerNewUser = (req, res)=> {
     res.json({
         msg: "registered successfully"
     })
 }
 
-module.exports= {registerNewUser}
+module.exports = registerNewUser

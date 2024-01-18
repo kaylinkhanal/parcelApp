@@ -25,3 +25,9 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.formfields {
+  width: 40%;
+  margin: 10px;
+  cursor: text;
+}

@@ -1,11 +1,11 @@
 import React from 'react'
 import Nav from '@/components/navBar/page'
-import Footer from '@/components/footer/page'
+import Layout from '@/components/layout/page'
 
 const page = () => {
   return (
     <div>
-      <Nav/>
+      <Layout>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">
@@ -56,7 +56,9 @@ const page = () => {
     </div>
   </div>
 </section>
-        <Footer/>
+      </Layout>
+   
+     
       </div>
   )
 }

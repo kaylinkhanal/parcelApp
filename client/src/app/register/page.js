@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {Input} from "@nextui-org/react";
 import styles from './styles.module.css'
+import {  toast } from 'react-toastify';
 const SignupForm = () => {
    const SignupSchema = Yup.object().shape({
      email: Yup.string().email('Invalid email').required('Required'),
@@ -18,7 +19,7 @@ const SignupForm = () => {
     body: JSON.stringify(values)
   })
   const data = await res.json()
-  alert(data.msg)
+  toast(data.msg)
  }
   const formik = useFormik({
     initialValues: {

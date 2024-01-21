@@ -11,7 +11,7 @@ const SignInForm = () => {
   const router = useRouter()
 
    const SignupSchema = Yup.object().shape({
-   email: Yup.string().email('Invalid email').required('Required'),
+   phoneNumber: Yup.string().required('Required'),
  });
  
  const loginUser = async(values)=> {

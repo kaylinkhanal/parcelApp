@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 const SignInForm = () => {
   const router = useRouter()
 
-   const SignupSchema = Yup.object().shape({
+   const SignInSchema = Yup.object().shape({
    phoneNumber: Yup.string().required('Required'),
  });
  
@@ -32,7 +32,7 @@ const SignInForm = () => {
       phoneNumber: '',
       password: '',
     },
-    validationSchema:SignupSchema,
+    validationSchema:SignInSchema,
     onSubmit: values => {
       loginUser(values)
     },

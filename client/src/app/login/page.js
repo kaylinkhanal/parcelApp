@@ -14,8 +14,8 @@ const SignInForm = () => {
    email: Yup.string().email('Invalid email').required('Required'),
  });
  
- const registerUser = async(values)=> {
- const res=  await fetch('http://localhost:5000/register/',{
+ const loginUser = async(values)=> {
+ const res=  await fetch('http://localhost:5000/login/',{
     method: 'POST',
     headers: {'Content-Type':'application/json' },
     body: JSON.stringify(values)
@@ -30,13 +30,11 @@ const SignInForm = () => {
   const formik = useFormik({
     initialValues: {
       phoneNumber: '',
-      email: '',
       password: '',
-      role:''
     },
     validationSchema:SignupSchema,
     onSubmit: values => {
-      registerUser(values)
+      loginUser(values)
     },
   });
 

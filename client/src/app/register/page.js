@@ -2,9 +2,10 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import {Input} from "@nextui-org/react";
+import {Input,Button} from "@nextui-org/react";
 import styles from './styles.module.css'
 import {  toast } from 'react-toastify';
+import Layout from '@/components/layout/page'
 import { useRouter } from 'next/navigation'
 const SignupForm = () => {
   const router = useRouter()
@@ -41,15 +42,17 @@ const SignupForm = () => {
   });
 
   return (
+    <Layout>
     <form  className={styles.formfields} onSubmit={formik.handleSubmit}>
-      <label htmlFor="firstName">phoneNumber</label>
+      <h2>Register</h2>
       <Input 
        id="phoneNumber"
+       label="phoneNumber"
        name="phoneNumber"
        type="text"
        onChange={formik.handleChange}
        value={formik.values.phoneNumber}
-      label="phoneNumber" />
+      />
         {formik?.errors.phoneNumber}
       <Input 
        id="email"
@@ -73,8 +76,9 @@ const SignupForm = () => {
        onChange={formik.handleChange}
        value={formik.values.role}
       label="role" />
-      <button type="submit">Submit</button>
+      <Button type="submit">Submit</Button>
     </form>
+  </Layout>
   );
 };
 

@@ -13,7 +13,7 @@ export default function App() {
         <Image src="/parcellogo.png" width="80" height="90"/>
           <p className="hidden sm:block font-bold text-inherit">Parcel App</p>
         </NavbarBrand>
-        <NavbarContent className="hidden sm:flex gap-3">
+        {/* <NavbarContent className="hidden sm:flex gap-3">
           <NavbarItem>
             <Link color="foreground" href="#">
               Features
@@ -29,11 +29,11 @@ export default function App() {
               Integrations
             </Link>
           </NavbarItem>
-        </NavbarContent>
+        </NavbarContent> */}
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center" justify="end">
-       <Button>Login</Button>
+       <Button as={Link} href='/login'>Login</Button>
        <Button as={Link} href='/register'>Register</Button>
         <Dropdown placement="bottom-end">
           <DropdownTrigger>

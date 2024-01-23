@@ -1,6 +1,8 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const jwt = require('jsonwebtoken');
+
 const registerNewUser = async(req,res)=>{
     try{
         const existingUser = await User.findOne({phoneNumber: req.body.phoneNumber})
@@ -20,16 +22,23 @@ const registerNewUser = async(req,res)=>{
     }
   
 }
-
+const getAllUsers = async(req,res)=>{
+    const data = await User.find()
+    res.json({data})
+  
+}
 
 const loginUser = async(req,res)=>{
     try{
        const userDetails = await User.findOne({phoneNumber: req.body.phoneNumber})
        if(userDetails){
         const match = await bcrypt.compare(req.body.password, userDetails.password);
+        
         if(match){
+            const token = jwt.sign({ phoneNumber: req.body.phoneNumber }, 'shhhhh');
             res.json({
-                msg: 'Login success'
+                msg: 'Login success',
+                token
             })
         }else{
             res.json({
@@ -46,4 +55,4 @@ const loginUser = async(req,res)=>{
     }
   
 }
-module.exports= {registerNewUser,loginUser}
+module.exports= {registerNewUser,loginUser,getAllUsers}

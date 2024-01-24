@@ -2,10 +2,13 @@
 import React from 'react'
 import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
+
 import { useSelector, useDispatch } from 'react-redux'
-import {increment} from '@/redux/reducerSlice/countSlice'
+import {increment, decrement} from '@/redux/reducerSlice/countSlice'
+import {chageColor} from '@/redux/reducerSlice/boxSlice'
 const page = () => {
   const {count} = useSelector(state=>state.count)
+  const {width, height ,backgroundColor} = useSelector(state=>state.box)
   const dispatch = useDispatch();
   // 'Normal function call it increment()'
   // 'Redux function  dispatch and call it dispatch(increment())'
@@ -13,8 +16,14 @@ const page = () => {
   return (
     <div>
       <Layout>
-       count is {count}
-       <button onClick={()=>dispatch(increment())}>Increment</button>
+        <div
+          style={{width: width, height: height, backgroundColor:backgroundColor}}
+        >
+          
+        </div>
+        <input placeholder='color' onChange={(e)=>dispatch(chageColor(e.target.value))}/>
+        <button>Change to circle</button>
+       <button onClick={()=>dispatch(chageWidth())}>Change width</button>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">

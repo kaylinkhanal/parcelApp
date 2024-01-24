@@ -4,8 +4,10 @@ import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
 import { useSelector, useDispatch } from 'react-redux'
 import {decrement, increment} from '@/redux/reducerSlice/countSlice'
+import { changeBg, makeCircle } from '@/redux/reducerSlice/boxSlice'
 const page = () => {
   const {count} = useSelector(state=>state.count)
+  const {width,height,borderRadius,backgroundColor} = useSelector(state=>state.box)
   const dispatch = useDispatch();
   // 'Normal function call it increment()'
   // 'Redux function  dispatch and call it dispatch(increment())'
@@ -15,7 +17,12 @@ const page = () => {
       <Layout>
        count is {count} <br />
        <button onClick={()=>dispatch(increment())}>Increment</button> <br />
-       <button onClick={()=>dispatch(decrement())}>Decrement</button>
+       <button onClick={()=>dispatch(decrement())}>Decrement</button> <br /> <br />
+       <div style={{width:width+'px', height:height+'px' , backgroundColor ,borderRadius:borderRadius+'%'}}>
+       </div>
+       <br />
+       <input type="text" onChange={(e)=>dispatch(changeBg(e.target.value))} />
+       <button onClick={()=>dispatch(makeCircle())}>Make Circle</button>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">

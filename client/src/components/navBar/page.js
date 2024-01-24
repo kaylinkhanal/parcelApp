@@ -10,7 +10,7 @@ export default function App() {
     <Navbar isBordered>
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
-        <Image src="/parcellogo.png" width="80" height="90"/>
+        <Image src="/parcellogo.png" href='/' width="80" height="90"/>
           <p className="hidden sm:block font-bold text-inherit">Parcel App</p>
         </NavbarBrand>
         {/* <NavbarContent className="hidden sm:flex gap-3">

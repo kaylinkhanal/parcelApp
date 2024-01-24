@@ -3,9 +3,9 @@ import React from 'react'
 import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
 import { useSelector, useDispatch } from 'react-redux'
-import {increment} from '@/redux/reducerSlice/countSlice'
+import {increaseHeight,increaseWidth,color,radius} from '@/redux/reducerSlice/countSlice'
 const page = () => {
-  const {count} = useSelector(state=>state.count)
+  const {width,height,backgroundColor,borderRadius} = useSelector(state=>state.box)
   const dispatch = useDispatch();
   // 'Normal function call it increment()'
   // 'Redux function  dispatch and call it dispatch(increment())'
@@ -13,8 +13,11 @@ const page = () => {
   return (
     <div>
       <Layout>
-       count is {count}
-       <button onClick={()=>dispatch(increment())}>Increment</button>
+      <button onClick={()=>dispatch(increaseHeight())}>Increment height</button>
+      <div  style={{backgroundColor, width:width+'px', height:height+'px', borderRadius}}></div>
+      <button onClick={()=>dispatch(increaseWidth())}>Increment width</button>
+      <button onClick={()=>dispatch(radius(10))}>click to change box into oval</button>
+      <input placeholder='enter color' onChange={(e)=>dispatch(color(e.target.value))}/>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">

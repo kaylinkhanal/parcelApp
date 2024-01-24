@@ -3,7 +3,7 @@ import React from 'react'
 import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
 import { useSelector, useDispatch } from 'react-redux'
-import {increment} from '@/redux/reducerSlice/countSlice'
+import {decrement, increment} from '@/redux/reducerSlice/countSlice'
 const page = () => {
   const {count} = useSelector(state=>state.count)
   const dispatch = useDispatch();
@@ -13,8 +13,9 @@ const page = () => {
   return (
     <div>
       <Layout>
-       count is {count}
-       <button onClick={()=>dispatch(increment())}>Increment</button>
+       count is {count} <br />
+       <button onClick={()=>dispatch(increment())}>Increment</button> <br />
+       <button onClick={()=>dispatch(decrement())}>Decrement</button>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">

@@ -8,7 +8,7 @@ export const countSlice = createSlice({
   initialState,
   reducers: {
     increment: (state, action) => {
-      
+      state.count++
     }
 }});
 

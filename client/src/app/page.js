@@ -3,19 +3,41 @@ import React from 'react'
 import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
 import { useSelector, useDispatch } from 'react-redux'
-import {decrement, increment} from '@/redux/reducerSlice/countSlice'
+import {changeSize, dechangeSize, changeBackgroundColor, changeToCircle} from '@/redux/reducerSlice/boxSlice'
+import { Tab } from '@nextui-org/react'
 const page = () => {
   const {count} = useSelector(state=>state.count)
+  const {width, height, backgroundColor, borderRadius} = useSelector(state=>state.box)
   const dispatch = useDispatch();
   // 'Normal function call it increment()'
   // 'Redux function  dispatch and call it dispatch(increment())'
+  const pi = Math.PI
+const generatedArea = ()=> {
+  if (borderRadius){
+    const area = pi*(width/2) ** 2
+    return area.toFixed(2)
+  }else{
+    const area = width * height
+    return area
+  }
 
+}
   return (
     <div>
       <Layout>
-       count is {count}
-       <button onClick={()=>dispatch(increment())}>Increment</button>
-       <button onClick={()=>dispatch(decrement())}>Decrement</button>
+
+        <div style={{width:width+'px', height:height+'px', backgroundColor, borderRadius}}></div>
+        <br/>
+        <input placeholder='enter color' onChange={(e)=>dispatch(changeBackgroundColor(e.target.value))}/>
+        <br/>
+       {/* count is {count} */}
+       <button onClick={()=>dispatch(changeSize())}>Increment</button>
+       <br/>
+       <button onClick={()=>dispatch(dechangeSize())}>Decrement</button>
+       <br/>
+       <button onClick={()=>dispatch(changeToCircle())}>Shape to {borderRadius ? 'rectangle' : 'Circle'}</button>
+        <br/>
+        area:{generatedArea()}
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">

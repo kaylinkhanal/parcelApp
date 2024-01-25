@@ -5,25 +5,25 @@ import Layout from '@/components/layout/page'
 
 import { useSelector, useDispatch } from 'react-redux'
 import {increment, decrement} from '@/redux/reducerSlice/countSlice'
-import {chageColor} from '@/redux/reducerSlice/boxSlice'
+import {chageColor,chageWidth,changeToCircle} from '@/redux/reducerSlice/boxSlice'
 const page = () => {
   const {count} = useSelector(state=>state.count)
-  const {width, height ,backgroundColor} = useSelector(state=>state.box)
+  const {width, height ,backgroundColor,borderRadius} = useSelector(state=>state.box)
   const dispatch = useDispatch();
   // 'Normal function call it increment()'
   // 'Redux function  dispatch and call it dispatch(increment())'
-
+const area = width *4 
   return (
     <div>
       <Layout>
         <div
-          style={{width: width, height: height, backgroundColor:backgroundColor}}
+          style={{width, height,backgroundColor,borderRadius}}
         >
           
         </div>
+        area : {area}
         <input placeholder='color' onChange={(e)=>dispatch(chageColor(e.target.value))}/>
-        <button>Change to circle</button>
-       <button onClick={()=>dispatch(chageWidth())}>Change width</button>
+        <button onClick={()=>dispatch(changeToCircle())}>Change to {borderRadius ? 'rectangle': 'circle'}</button>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">

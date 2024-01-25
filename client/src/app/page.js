@@ -3,7 +3,7 @@ import React from 'react'
 import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
 import { useSelector, useDispatch } from 'react-redux'
-import {changeWidth,changeBackgroundColor} from '@/redux/reducerSlice/boxSlice'
+import {Input, Button} from "@nextui-org/react";
 const page = () => {
   const {count} = useSelector(state=>state.count)
   const {width, height, backgroundColor} = useSelector(state=>state.box)
@@ -16,6 +16,11 @@ const page = () => {
     <div>
       <Layout>
 
+      <div className='p-3 max-w-lg mx-auto flex flex-row gap-1'>
+        <Input type="text" label="Enter your order id" />
+        <Button size="lg">TRACK</Button>  
+
+    </div>
       
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">

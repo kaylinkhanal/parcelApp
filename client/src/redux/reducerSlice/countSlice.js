@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  width:10,
-  height:10,
+  width:30,
+  height:30,
   backgroundColor:'red',
   borderRadius:0
 }
@@ -20,7 +20,9 @@ export const countSlice = createSlice({
       state.backgroundColor = action.payload
     },
     radius:(state,action) =>{
-      state.borderRadius = action.payload
+      if (state.borderRadius==='50%'){
+        state.borderRadius=0
+      }else state.borderRadius='50%'
     }
 }});
 

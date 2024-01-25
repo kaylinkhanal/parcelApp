@@ -10,13 +10,19 @@ const page = () => {
   // 'Normal function call it increment()'
   // 'Redux function  dispatch and call it dispatch(increment())'
 
+  const generateArea=()=>{
+    if (borderRadius===0){
+       return height*width
+    }else  return (Math.PI*((width/2)**2)).toFixed(2)
+  }
   return (
     <div>
       <Layout>
       <button onClick={()=>dispatch(increaseHeight())}>Increment height</button>
       <div  style={{backgroundColor, width:width+'px', height:height+'px', borderRadius}}></div>
       <button onClick={()=>dispatch(increaseWidth())}>Increment width</button>
-      <button onClick={()=>dispatch(radius(10))}>click to change box into oval</button>
+      <button onClick={()=>dispatch(radius())}>click to change {borderRadius ?'reactangel':'circle'}</button><br/>
+      area: {generateArea()}<br/>
       <input placeholder='enter color' onChange={(e)=>dispatch(color(e.target.value))}/>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">

@@ -7,9 +7,11 @@ import {Input,Button} from "@nextui-org/react";
 import {  toast } from 'react-toastify';
 import Layout from '@/components/layout/page'
 import { useRouter } from 'next/navigation'
+import {addUserDetails} from '@/redux/reducerSlice/userSlice'
+import { useDispatch } from 'react-redux';
 const SignInForm = () => {
   const router = useRouter()
-
+  const dispatch = useDispatch()
    const SignInSchema = Yup.object().shape({
    phoneNumber: Yup.string().required('Required'),
  });
@@ -22,7 +24,9 @@ const SignInForm = () => {
   })
   const data = await res.json()
   if(res.status == 200) {
+    dispatch(addUserDetails(data))
     router.push('/login')
+
   }
   toast(data.msg)
   

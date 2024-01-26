@@ -40,9 +40,9 @@ const loginUser = async(req,res)=>{
         if(match){
             const token = jwt.sign({ phoneNumber: req.body.phoneNumber }, 'shhhhh');
             res.json({
+                userDetails,
                 msg: 'Login success',
                 token,
-                userDetails
             })
         }else{
             res.json({

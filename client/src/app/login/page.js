@@ -3,13 +3,14 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {Input,Button} from "@nextui-org/react";
-
+import { addUserDetails } from '@/redux/reducerSlice/userSlice';
 import {  toast } from 'react-toastify';
 import Layout from '@/components/layout/page'
 import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux';
 const SignInForm = () => {
   const router = useRouter()
-
+  const dispatch =useDispatch()
    const SignInSchema = Yup.object().shape({
    phoneNumber: Yup.string().required('Required'),
  });
@@ -23,6 +24,7 @@ const SignInForm = () => {
   const data = await res.json()
   if(res.status == 200) {
     router.push('/login')
+    dispatch(addUserDetails(data))
   }
   toast(data.msg)
   

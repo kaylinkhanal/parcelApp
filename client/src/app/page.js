@@ -4,14 +4,6 @@ import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
 import { useSelector, useDispatch } from 'react-redux'
 const page = () => {
-  // 'Normal function call it increment()'
-  // 'Redux function  dispatch and call it dispatch(increment())'
-
-  const generateArea=()=>{
-    if (borderRadius===0){
-       return height*width
-    }else  return (Math.PI*((width/2)**2)).toFixed(2)
-  }
   return (
     <div>
       <Layout>

@@ -21,3 +21,8 @@ Phase 2:
 - Generate QR for order details
 - Deploy-> vercel and render
 - Google/github 
+
+
+flow: 
+
+login ---> home 

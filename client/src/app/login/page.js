@@ -23,6 +23,7 @@ const SignInForm = () => {
   })
   const data = await res.json()
   if(res.status == 200) {
+    dispatch(addUserDetails(data))
     router.push('/login')
     dispatch(addUserDetails(data))
   }

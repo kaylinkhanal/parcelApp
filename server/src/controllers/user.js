@@ -28,6 +28,9 @@ const getAllUsers = async(req,res)=>{
   
 }
 
+
+
+
 const loginUser = async(req,res)=>{
     try{
        const userDetails = await User.findOne({phoneNumber: req.body.phoneNumber})

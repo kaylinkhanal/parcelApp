@@ -6,19 +6,34 @@ import { useSelector, useDispatch } from 'react-redux'
 import {increment, decrement} from '@/redux/reducerSlice/boxSlice'
 import { changeBorderRadius, changeBackgroundColor } from '@/redux/reducerSlice/boxSlice'
 const page = () => {
-    const {borderRadius, height, backgroundColor } = useSelector(state=>state.box)
+    const {borderRadius, width, height, backgroundColor } = useSelector(state=>state.box)
     const dispatch = useDispatch()
   // 'Normal function call it increment()'
   // 'Redux function  dispatch and call it dispatch(increment())'
 
+  const generateArea = ()=>{
+    if (borderRadius ){
+      const area = width * height
+      return area
+    } else{
+      const radius = width/2
+      const area = Math.PI*(radius * radius)
+      return area
+    }
+    }
+  
+
   return (
+    
     <div>
       <Layout>
-        <div style={{borderRadius: borderRadius+'px', height:height+'px' , backgroundColor, width: '30px'}}>
+        <div style={{borderRadius: borderRadius, height:height+'px' , backgroundColor, width: '30px'}}>
+          
 
         </div>
+        Area: {generateArea()}
         <input placeholder='Enter color' onChange={(e)=>dispatch(changeBackgroundColor(e.target.value))} /> <br/>
-       <button onClick={()=>dispatch(changeBorderRadius())}>Change to circle</button>
+       <button onClick={()=>dispatch(changeBorderRadius())}>Change to {borderRadius ? 'rectangle':'circle'}</button>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">
@@ -74,6 +89,6 @@ const page = () => {
      
       </div>
   )
-}
 
+  }
 export default page

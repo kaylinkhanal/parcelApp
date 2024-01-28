@@ -26,9 +26,11 @@ const SignInForm = () => {
     dispatch(addUserDetails(data))
     router.push('/home')
     dispatch(addUserDetails(data))
-  }else{
+  } else {
     toast(data.msg)
+
   }
+  
  }
   const formik = useFormik({
     initialValues: {

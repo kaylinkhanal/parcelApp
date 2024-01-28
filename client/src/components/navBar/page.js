@@ -1,22 +1,34 @@
 "use client";
 import React from "react";
-import {Navbar,Button,  NavbarBrand, NavbarContent, NavbarItem, Input, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Avatar} from "@nextui-org/react";
-import Image from 'next/image'
-import Link from 'next/link'
+import {
+  Navbar,
+  Button,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Input,
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  Avatar,
+} from "@nextui-org/react";
+import Image from "next/image";
+import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
-
-import {logout} from '@/redux/reducerSlice/userSlice'
+import { logout } from "@/redux/reducerSlice/userSlice";
 import { useRouter } from "next/navigation";
+
 export default function App() {
   const dispatch = useDispatch()
   const router = useRouter()
-  const {isLoggedIn} = useSelector(state=>state.user)
-  const handleLogout = () => {
+  const { isLoggedIn } = useSelector((state) => state.user);
+  const handleLogout = ()=>{
     dispatch(logout())
     router.push('/')
   }
-  const LoggedInDrop = ()=>{
-    return(    
+  const LoggedInDrop = () => {
+    return (
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
           <Avatar
@@ -44,22 +56,26 @@ export default function App() {
             Log Out
           </DropdownItem>
         </DropdownMenu>
-      </Dropdown>) 
-  }
-
+      </Dropdown>
+    );
+  };
   const AuthButtons = () => {
     return (
       <>
-       <Button as={Link} href='/login'>Login</Button>
-       <Button as={Link} href='/register'>Register</Button>
+        <Button as={Link} href="/login">
+          Login
+        </Button>
+        <Button as={Link} href="/register">
+          Register
+        </Button>
       </>
-    )
-  }
+    );
+  };
   return (
     <Navbar isBordered>
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
-        <Image src="/parcellogo.png" width="80" height="90"/>
+          <Image src="/parcellogo.png" width="80" height="90" />
           <p className="hidden sm:block font-bold text-inherit">Parcel App</p>
         </NavbarBrand>
         {/* <NavbarContent className="hidden sm:flex gap-3">
@@ -82,9 +98,7 @@ export default function App() {
       </NavbarContent>
 
       <NavbarContent as="div" className="items-center" justify="end">
-        {isLoggedIn ?  <LoggedInDrop/> : <AuthButtons/>}
-      
-    
+        {isLoggedIn ? <LoggedInDrop /> : <AuthButtons />}
       </NavbarContent>
     </Navbar>
   );

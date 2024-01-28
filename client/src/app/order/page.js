@@ -1,24 +1,9 @@
-'use client'
-import React, {useState} from "react";
-import {Checkbox} from "@nextui-org/react";
+import React from 'react'
 
-export default function App() {
-    const [detailsOpen, setDetailsOpen ] = useState(false)
-  
-               
+const page = () => {
   return (
-  <>
-    <Checkbox onChange={()=> setDetailsOpen(!detailsOpen)}  checked={detailsOpen} >Option</Checkbox>
-    {detailsOpen ? (
-
-        <div>
-            <input/><br/>
-            <input/><br/>
-            <input/><br/>
-            <input/>
-
-        </div>
-    ): null}
-  </>
-  );
+    <div>page</div>
+  )
 }
+
+export default page

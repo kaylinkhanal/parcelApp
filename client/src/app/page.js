@@ -3,6 +3,7 @@ import React from 'react'
 import Nav from '@/components/navBar/page'
 import Layout from '@/components/layout/page'
 import { useSelector, useDispatch } from 'react-redux'
+import { FaBeer } from 'react-icons/fa';
 const page = () => {
   return (
     <div>

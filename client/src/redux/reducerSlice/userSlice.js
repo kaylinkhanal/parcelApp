@@ -18,12 +18,12 @@ export const userSlice = createSlice({
         isLoggedIn: true
       }
     },
-    logout: (state, action)=>{
-      return {
-        ...initialState
-      }
+    logout:(state,action)=>{
+     return {
+      ...initialState
+     }
     }
 }});
 
-export const { addUserDetails, logout } = userSlice.actions;
+export const { addUserDetails,logout } = userSlice.actions;
 export default userSlice.reducer;

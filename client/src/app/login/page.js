@@ -45,7 +45,7 @@ const SignInForm = () => {
 
   return (
     <Layout>
-    <form  onSubmit={formik.handleSubmit}>
+    <form  className='p-24' onSubmit={formik.handleSubmit}>
       <h2>Sign In</h2>
       <Input 
        id="phoneNumber"

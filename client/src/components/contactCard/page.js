@@ -4,7 +4,8 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@nex
 
 export default function ContactCard(props) {
   return (
-    <Card className="m-12 max-w-[400px]">
+    <Link href={"/contact/"+props.item._id}>
+ <Card  className="m-12 max-w-[400px]">
       <CardHeader className="flex gap-3">
         <div className="flex flex-col">
           <p className="text-md">{props.item.fullName}</p>
@@ -18,5 +19,7 @@ export default function ContactCard(props) {
       <Divider/>
 
     </Card>
+    </Link>
+   
   );
 }

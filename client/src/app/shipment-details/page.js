@@ -1,4 +1,5 @@
 "use client"
+import { Button } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { FaFileAlt, FaBox } from 'react-icons/fa'
 
@@ -85,6 +86,7 @@ const ShipmentDetails = () => {
       <div className="mb-4">
         <p>Total Chargeable Weight: {chargeableWeight} {unit}</p>
       </div>
+      <Button>Proceed</Button>
     </div>
   )
 }

@@ -1,11 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  width: 30,
-  height: 30,
+  width: 150,
+  height: 150,
   backgroundColor: 'red',
-  borderRadius : 0
-  
+  borderRadius : 0,
 
 }
 export const boxSlice = createSlice({

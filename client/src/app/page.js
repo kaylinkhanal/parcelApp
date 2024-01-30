@@ -7,6 +7,7 @@ import { FcCustomerSupport } from "react-icons/fc";
 import { BsBoxSeamFill } from "react-icons/bs";
 import { FcServices } from "react-icons/fc";
 import { useSelector, useDispatch } from 'react-redux'
+import { FaBeer } from 'react-icons/fa';
 const page = () => {
   return (
     <div>

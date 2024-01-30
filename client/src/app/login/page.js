@@ -16,7 +16,7 @@ const SignInForm = () => {
  });
  
  const loginUser = async(values)=> {
- const res=  await fetch('http://localhost:5000/login/',{
+ const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/login/`,{
     method: 'POST',
     headers: {'Content-Type':'application/json' },
     body: JSON.stringify(values)
@@ -24,10 +24,12 @@ const SignInForm = () => {
   const data = await res.json()
   if(res.status == 200) {
     dispatch(addUserDetails(data))
-    router.push('/login')
+    router.push('/home')
     dispatch(addUserDetails(data))
+  } else {
+    toast(data.msg)
+
   }
-  toast(data.msg)
   
  }
   const formik = useFormik({
@@ -43,7 +45,7 @@ const SignInForm = () => {
 
   return (
     <Layout>
-    <form  onSubmit={formik.handleSubmit}>
+    <form  className='p-24' onSubmit={formik.handleSubmit}>
       <h2>Sign In</h2>
       <Input 
        id="phoneNumber"

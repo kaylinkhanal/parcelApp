@@ -15,8 +15,7 @@ const page = () => {
       <div className='p-3 max-w-lg mx-auto flex flex-row gap-1'>
         <Input type="text" label="Enter your order id" />
         <Button color="warning" size='lg'>TRACK</Button>  
-      
-    </div>
+      </div>
       <section className="text-gray-600 body-font">
   <div className="container px-5 py-24 mx-auto">
     <div className="flex flex-col text-center w-full mb-20">

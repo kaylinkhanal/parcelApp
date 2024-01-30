@@ -1,9 +1,12 @@
 "use client"
+import { addShipmentDetails } from '@/redux/reducerSlice/orderSlice'
 import { Button } from '@nextui-org/react'
 import React, { useState } from 'react'
 import { FaFileAlt, FaBox } from 'react-icons/fa'
+import { useDispatch } from 'react-redux'
 
 const ShipmentDetails = () => {
+  const dispatch= useDispatch()
   const [selectedOption, setSelectedOption] = useState(null)
   const [pieces, setPieces] = useState('')
   const [weight, setWeight] = useState('')
@@ -15,7 +18,17 @@ const ShipmentDetails = () => {
   }
 
   const chargeableWeight = pieces > 0 && weight > 0 ? pieces * weight : 0
-
+  const handleSave = ()=>{
+    const shipmentDetails = {
+      selectedOption,
+      pieces,
+      weight,
+      unit,
+      parcelInput
+    }
+    dispatch(addShipmentDetails(shipmentDetails))
+    //dispatch and call dispatch(addShipmentDetails(shipmentDetails))
+  }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-3xl mb-4">What is your shipment content?</h1>
@@ -86,7 +99,7 @@ const ShipmentDetails = () => {
       <div className="mb-4">
         <p>Total Chargeable Weight: {chargeableWeight} {unit}</p>
       </div>
-      <Button>Proceed</Button>
+      <Button onClick={handleSave}>Proceed</Button>
     </div>
   )
 }

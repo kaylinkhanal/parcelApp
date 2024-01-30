@@ -22,7 +22,7 @@ import { useRouter } from "next/navigation";
 export default function App() {
   const dispatch = useDispatch()
   const router = useRouter()
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const { isLoggedIn, userDetails } = useSelector((state) => state.user);
   const handleLogout = ()=>{
     dispatch(logout())
     router.push('/')
@@ -44,7 +44,7 @@ export default function App() {
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           <DropdownItem key="profile" className="h-14 gap-2">
             <p className="font-semibold">Signed in as</p>
-            <p className="font-semibold">zoey@example.com</p>
+            <p className="font-semibold">{userDetails.email}</p>
           </DropdownItem>
           <DropdownItem key="settings">My Settings</DropdownItem>
           <DropdownItem key="team_settings">Team Settings</DropdownItem>

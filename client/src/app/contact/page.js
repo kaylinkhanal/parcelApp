@@ -10,7 +10,7 @@ const page = () => {
   const [selectedContact, setSelectedContact] = useState(null)
   const {userDetails} = useSelector(state=>state.user)
   const fetchContacts = async()=>{
-    const res = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts?userId=`+userDetails._id )
+    const res = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contact?userId=`+userDetails._id )
     const data = await res.json()
     setContactList(data.contactList )
   }

@@ -16,7 +16,7 @@ const SignupForm = () => {
  });
  
  const registerUser = async(values)=> {
- const res=  await fetch('http://localhost:5000/register/',{
+ const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/register/`,{
     method: 'POST',
     headers: {'Content-Type':'application/json' },
     body: JSON.stringify(values)

@@ -7,9 +7,10 @@ import ContactCard from "@/components/contactCard/page";
 
 const page = () => {
   const [contactList, setContactList] = useState([])
+  const [selectedContact, setSelectedContact] = useState(null)
   const {userDetails} = useSelector(state=>state.user)
   const fetchContacts = async()=>{
-    const res = await fetch('http://localhost:5000/contacts?userId='+userDetails._id )
+    const res = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts?userId=`+userDetails._id )
     const data = await res.json()
     setContactList(data.contactList )
   }
@@ -19,35 +20,34 @@ const page = () => {
 
   const addNewContact = async(values)=> {
     values.userId = userDetails._id
-   await fetch('http://localhost:5000/contacts/',{
+ const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts/`,{
        method: 'POST',
        headers: {'Content-Type':'application/json' },
        body: JSON.stringify(values)
      })
+ if(res) fetchContacts()
      
     }
   const formik = useFormik({
-    initialValues: {
+    initialValues: selectedContact || {
       fullName: '',
       country: '',
       email: '',
       phoneNumber: ''
     },
+    enableReinitialize: true,
     onSubmit: values => {
       addNewContact(values)
     },
   });
 
+  
   return (
     <div> 
-      {JSON.stringify(contactList)}
     {contactList.length>0 && contactList.map((item)=>{
-      return  <ContactCard item={item}/>
+      return  <ContactCard setSelectedContact={setSelectedContact} selectedContact={selectedContact} item={item}/>
     })}
-  
-      
-
-      <form  className='p-24' onSubmit={formik.handleSubmit}>
+      <form  className='p-2' onSubmit={formik.handleSubmit}>
       <section class="text-gray-600 body-font flex">
         <div class="ml-48 mr-48 mb-48 mt-20 py-24 bg-slate-50 shadow-2xl rounded-lg">
           <div class="flex flex-col text-center w-auto ">

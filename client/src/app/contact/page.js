@@ -27,7 +27,7 @@ const page = () => {
      })
  if(res) fetchContacts()
      
-    }
+    } 
   const formik = useFormik({
     initialValues: selectedContact || {
       fullName: '',

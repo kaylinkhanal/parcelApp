@@ -9,13 +9,6 @@ import { FcServices } from "react-icons/fc";
 import { useSelector, useDispatch } from 'react-redux'
 import { FaBeer } from 'react-icons/fa';
 const page = () => {
-<<<<<<< HEAD
-  // 'Normal function call it increment()'
-  // 'Redux function  dispatch and call it dispatch(increment())'
-
-  
-=======
->>>>>>> 83889fd154cfb02eaa30fe8ac41731c315439928
   return (
     <div>
       <Layout>

@@ -6,7 +6,7 @@ import { Avatar ,Divider ,Button} from "@nextui-org/react";
 import { Card, CardBody } from "@nextui-org/react";
 import { Descriptions } from 'antd';
 import { CiEdit } from "react-icons/ci";
-import {  Col, DatePicker, Drawer, Form, Input, Row, Select, Space } from 'antd'
+import {  Col,  Drawer, Form, Input, Row,  Space } from 'antd'
 
 const page = () => {
   const { userDetails } = useSelector(state => state.user)

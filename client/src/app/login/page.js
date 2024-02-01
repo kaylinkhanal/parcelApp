@@ -23,10 +23,13 @@ const SignInForm = () => {
   })
   const data = await res.json()
   if(res.status == 200) {
-    router.push('/login')
     dispatch(addUserDetails(data))
+    router.push('/home')
+    dispatch(addUserDetails(data))
+  } else {
+    toast(data.msg)
+
   }
-  toast(data.msg)
   
  }
   const formik = useFormik({
@@ -42,7 +45,7 @@ const SignInForm = () => {
 
   return (
     <Layout>
-    <form  onSubmit={formik.handleSubmit}>
+    <form  className='p-24' onSubmit={formik.handleSubmit}>
       <h2>Sign In</h2>
       <Input 
        id="phoneNumber"

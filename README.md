@@ -5,7 +5,7 @@ Phase 1
     - Register
 - Order creation:
     - Address: map (location…..)
-    - Form:  categoryType, remarks, image upload (multer+react dragdropzone), calendar + time picker (emergency 5 hrs) 30km/hr
+    - Form: documents + parcel,  image upload (multer+react dragdropzone), calendar + time picker (emergency 5 hrs) 30km/hr
     - Sender form: senderName, phoneNumber,
 - Order tracking by receiver
 - Order history
@@ -21,3 +21,8 @@ Phase 2:
 - Generate QR for order details
 - Deploy-> vercel and render
 - Google/github 
+
+
+flow: 
+
+login ---> home 

@@ -1,9 +1,10 @@
 import React from 'react'
 import { Image } from '@nextui-org/react'
-
+import Checkbox from './checkbox'
 const page = () => {
   return (
     <div>
+      <Checkbox/>
       <section className="text-gray-600 body-font">
   <div className="container px-60 py-60 mx-auto">
     

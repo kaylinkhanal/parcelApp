@@ -2,16 +2,29 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   shipmentDetails : {},
-  locationDetails: {}
+  locationDetails: {},
+  deliveryTiming: {}
 }
 export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
     addShipmentDetails: (state, action) => {
-      state.shipmentDetails= action.payload
+      return {
+        ...state,
+        shipmentDetails: action.payload
+      }
+    },
+    addDeliveryTiming: (state, action) => {
+        return {
+          ...state,
+          deliveryTiming:{
+            pickupDate: action.payload[0],
+            deliveryDate: action.payload[1]
+          }
+        }
     },
 }});
 
-export const { addShipmentDetails } = orderSlice.actions;
+export const { addShipmentDetails,addDeliveryTiming } = orderSlice.actions;
 export default orderSlice.reducer;

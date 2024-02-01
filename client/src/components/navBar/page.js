@@ -46,7 +46,7 @@ export default function App() {
             <p className="font-semibold">Signed in as</p>
             <p className="font-semibold">{userDetails.email}</p>
           </DropdownItem>
-          <DropdownItem key="settings">My Settings</DropdownItem>
+          <DropdownItem key="Profile">Profile</DropdownItem>
           <DropdownItem key="team_settings">Team Settings</DropdownItem>
           <DropdownItem key="analytics">Analytics</DropdownItem>
           <DropdownItem key="system">System</DropdownItem>

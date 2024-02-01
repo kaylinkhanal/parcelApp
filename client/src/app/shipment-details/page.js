@@ -1,28 +1,26 @@
 "use client"
-import { addShipmentDetails } from '@/redux/reducerSlice/orderSlice'
-
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers-pro';
-import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
-import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
-
-const BasicDateRangePicker=()=> {
-  return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={['DateRangePicker']}>
-        <DateRangePicker localeText={{ start: 'Check-in', end: 'Check-out' }} />
-      </DemoContainer>
-    </LocalizationProvider>
-  );
-}
+import { addShipmentDetails ,addDeliveryTiming} from '@/redux/reducerSlice/orderSlice'
 import { Button } from '@nextui-org/react'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import {Select, SelectSection, SelectItem} from "@nextui-org/react";
 import { FaFileAlt, FaBox } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { DatePicker, Space } from 'antd';
+const { RangePicker } = DatePicker;
+import Contact from '@/app/contact/page'
 
 
 const ShipmentDetails = () => {
-
+  const {userDetails} = useSelector(state=>state.user)
+  const [contactList, setContactList] = useState([])
+  const fetchContacts = async()=>{
+    const res = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts?userId=`+userDetails._id )
+    const data = await res.json()
+    setContactList(data.contactList )
+  }
+  useEffect(()=>{
+    fetchContacts()
+  },[])
   const dispatch= useDispatch()
   const [selectedOption, setSelectedOption] = useState(null)
   const [pieces, setPieces] = useState('')
@@ -54,6 +52,9 @@ const [step, setStep ] = useState(1)
   }
 
   const handleProceed = () => {
+    if(step===1){
+      handleSave()
+    }
     setStep(step +1)
   }
   const ShipmentInfo = ()=>{
@@ -133,16 +134,31 @@ return (
 </div>
 )
   }
-
+  const TimeContactPicker = () => (
+    <Space direction="vertical" size={12}>
+      <RangePicker showTime onChange={(_,dates)=> dispatch(addDeliveryTiming(dates))} />
+      <Select 
+        label="Pick receiver contact" 
+        className="max-w-xs" 
+      >
+        {contactList?.map((item) => (
+          <SelectItem key={item._id} value={item.fullName}>
+            {item.fullName}
+          </SelectItem>
+        ))}
+      </Select>
+    </Space>
+  );
   return (
-    <>
+    <div className='p-30 m-24'>
     {step == 1 && <ShipmentInfo/>}
-    {step ==2 && <BasicDateRangePicker/>}
+    {step ==2 && <TimeContactPicker/>}
+    <br/>
     <Button className='bg-orange-200 m-10' onClick={handleBack}>Back</Button>
     <Button className='bg-orange-200 m-10' onClick={handleProceed}>Proceed</Button>
 
 
-    </>
+    </div>
     
   )
 }

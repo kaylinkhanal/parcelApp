@@ -28,7 +28,17 @@ const getAllUsers = async(req,res)=>{
   
 }
 
+const changePassword = async(req,res)=>{
+    const user= await User.findById(req.params.id)
+    const match = await bcrypt.compare(req.body.oldPassword, user.password);
+    if(match){
 
+    }else{
+
+    }
+// 1. oldPassword  =====> db password check 
+
+}
 
 
 const loginUser = async(req,res)=>{
@@ -59,4 +69,4 @@ const loginUser = async(req,res)=>{
     }
   
 }
-module.exports= {registerNewUser,loginUser,getAllUsers}
+module.exports= {registerNewUser,loginUser,getAllUsers,changePassword}

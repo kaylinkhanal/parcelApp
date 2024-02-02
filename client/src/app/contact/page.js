@@ -4,13 +4,14 @@ import React, { useEffect , useState} from "react";
 import { useFormik } from 'formik';
 import { useSelector } from "react-redux";
 import ContactCard from "@/components/contactCard/page";
+import URI from "@/config/api";
 
 const page = () => {
   const [contactList, setContactList] = useState([])
   const [selectedContact, setSelectedContact] = useState(null)
   const {userDetails} = useSelector(state=>state.user)
   const fetchContacts = async()=>{
-    const res = await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts?userId=`+userDetails._id )
+    const res = await fetch(`${URI}/contacts?userId=`+userDetails._id )
     const data = await res.json()
     setContactList(data.contactList )
   }

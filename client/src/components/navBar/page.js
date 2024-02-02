@@ -46,15 +46,9 @@ export default function App() {
             <p className="font-semibold">Signed in as</p>
             <p className="font-semibold">zoey@example.com</p>
           </DropdownItem>
-          <DropdownItem key="settings">My Settings</DropdownItem>
-          <DropdownItem key="team_settings">Team Settings</DropdownItem>
-          <DropdownItem key="analytics">Analytics</DropdownItem>
-          <DropdownItem key="system">System</DropdownItem>
-          <DropdownItem key="configurations">Configurations</DropdownItem>
-          <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-          <DropdownItem onClick={handleLogout} key="logout" color="danger">
-            Log Out
-          </DropdownItem>
+          <DropdownItem onClick={()=>router.push('/profile')} key="Profile">Profile</DropdownItem>
+          <DropdownItem key="team_settings">Account Settings</DropdownItem>
+          <DropdownItem onClick={handleLogout} key="logout" color="danger">Log Out</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );
@@ -76,7 +70,8 @@ export default function App() {
       <NavbarContent justify="start">
         <NavbarBrand className="mr-4">
           <Image src="/parcellogo.png" width="80" height="90" />
-          <p className="hidden sm:block font-bold text-inherit">Parcel App</p>
+          <p  className="hidden sm:block font-bold text-inherit m-2"><Link href='/'>Parcel App</Link></p>
+          <p  className="hidden sm:block font-bold text-inherit m-2"><Link href='/home'>Dashboard</Link></p>
         </NavbarBrand>
         {/* <NavbarContent className="hidden sm:flex gap-3">
           <NavbarItem>

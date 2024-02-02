@@ -4,9 +4,10 @@ Phase 1
     -  Login required to access portal
     - Register
 - Order creation:
-    - Address: map (location…..)
-    - Form: documents + parcel,  image upload (multer+react dragdropzone), calendar + time picker (emergency 5 hrs) 30km/hr
+   
+    - Form: documents + parcel,  image upload (multer+react dragdropzone), calendar + time picker (emergency 5 hrs) 
     - Sender form: senderName, phoneNumber,
+     - Address: map (location…..) 30km/hr
 - Order tracking by receiver
 - Order history
 - Sender receives notification when item is delivered

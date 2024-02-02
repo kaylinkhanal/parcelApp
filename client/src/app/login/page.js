@@ -8,6 +8,7 @@ import {  toast } from 'react-toastify';
 import Layout from '@/components/layout/page'
 import { useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux';
+import URI from '@/config/api';
 const SignInForm = () => {
   const router = useRouter()
   const dispatch =useDispatch()
@@ -16,7 +17,7 @@ const SignInForm = () => {
  });
  
  const loginUser = async(values)=> {
- const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/login/`,{
+ const res=  await fetch(`${URI}/login/`,{
     method: 'POST',
     headers: {'Content-Type':'application/json' },
     body: JSON.stringify(values)

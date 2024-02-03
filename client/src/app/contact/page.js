@@ -4,8 +4,9 @@ import React, { useEffect , useState} from "react";
 import { useFormik } from 'formik';
 import { useSelector } from "react-redux";
 import ContactCard from "@/components/contactCard/page";
+import Layout from '@/components/layout/page'
 
-const page = () => {
+export const Contact = (props) => {
   const [contactList, setContactList] = useState([])
   const [selectedContact, setSelectedContact] = useState(null)
   const {userDetails} = useSelector(state=>state.user)
@@ -38,18 +39,20 @@ const page = () => {
     enableReinitialize: true,
     onSubmit: values => {
       addNewContact(values)
+      props?.onOpenChange()
+      props?.fetchContacts()
     },
   });
 
   
   return (
     <div> 
-    {contactList.length>0 && contactList.map((item)=>{
+    {contactList.length>0 && !props.formOnly && contactList.map((item)=>{
       return  <ContactCard setSelectedContact={setSelectedContact} selectedContact={selectedContact} item={item}/>
     })}
       <form  className='p-2' onSubmit={formik.handleSubmit}>
       <section class="text-gray-600 body-font flex">
-        <div class="ml-48 mr-48 mb-48 mt-20 py-24 bg-slate-50 shadow-2xl rounded-lg">
+        <div class="m-auto py-24 bg-slate-50 shadow-2xl rounded-lg">
           <div class="flex flex-col text-center w-auto ">
             <h1 class="sm:text-3xl h-12 text-2xl font-medium title-font mb-4 text-gray-900">
               Add Contact
@@ -128,9 +131,15 @@ const page = () => {
         </div>
       </section>
       </form>
-   
     </div>
   );
 };
 
-export default page;
+const ContactLayout = ()=>{
+  return (
+    <Layout>
+      <Contact/>
+    </Layout>
+  )
+}
+export default ContactLayout;

@@ -58,9 +58,9 @@ export default function App() {
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           <DropdownItem key="profile" className="h-14 gap-2">
             <p className="font-semibold">Signed in as</p>
-            <p className="font-semibold">{userDetails.email}</p>
+            <p className="font-semibold">{userDetails?.email}</p>
           </DropdownItem>
-          <DropdownItem key="Profile">Profile</DropdownItem>
+          <DropdownItem key="Profile"><Link href={"/profile"}>Profile</Link></DropdownItem>
           <DropdownItem key="team_settings">Team Settings</DropdownItem>
           <DropdownItem key="analytics">Analytics</DropdownItem>
           <DropdownItem key="system">System</DropdownItem>

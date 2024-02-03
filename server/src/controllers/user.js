@@ -28,9 +28,6 @@ const getAllUsers = async(req,res)=>{
   
 }
 
-
-
-
 const loginUser = async(req,res)=>{
     try{
        const userDetails = await User.findOne({phoneNumber: req.body.phoneNumber})
@@ -59,4 +56,33 @@ const loginUser = async(req,res)=>{
     }
   
 }
-module.exports= {registerNewUser,loginUser,getAllUsers}
+
+const changePassword = async (req,res)=>{
+try {
+    const userId = req.params.id
+    const {newPassword,oldPassword} = req.body
+    console.log(req.body)
+    const user = await User.findById(userId)
+    if(!user){
+        return res.status(404).json({
+            msg:"Invalid user id"
+        })
+    }
+    const match = await bcrypt.compare(oldPassword, user.password);
+    if(!match){
+        return res.status(401).json({
+            msg:"Old password is incorrect"
+        })
+    }
+    
+    user.password = newPassword
+    await user.save()
+    res.status(200).json({
+        msg:"Password changed succesfully"
+    })
+} catch (error) {
+    console.log(error)
+}
+
+}
+module.exports= {registerNewUser,loginUser,getAllUsers,changePassword}

@@ -21,7 +21,7 @@ import { FaFileAlt, FaBox } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
-import Contact from "@/app/contact/page";
+import {Contact} from "@/app/contact/page";
 
 const ShipmentDetails = () => {
   const { userDetails } = useSelector((state) => state.user);
@@ -37,6 +37,7 @@ const ShipmentDetails = () => {
   useEffect(() => {
     fetchContacts();
   }, []);
+
   const dispatch = useDispatch();
   const [selectedOption, setSelectedOption] = useState(null);
   const [pieces, setPieces] = useState("");
@@ -197,95 +198,7 @@ const ShipmentDetails = () => {
                 <ModalContent value="center">
                   {(onClose) => (
                     <>
-                      <ModalHeader className="flex flex-col gap-1">
-                        Add Receiver Contact
-                      </ModalHeader>
-                      <ModalBody>
-                        <div className="grid items-center">
-                          <label
-                            htmlFor="fullname"
-                            className="block text-sm mb-2 dark:text-white"
-                          >
-                            Full Name
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              id="fullname"
-                              name="fullname"
-                              className="py-3 px-4 block w-full border border-gray-400 rounded-lg text-sm focus:border-red-500 focus:ring-red-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                              required
-                              placeholder="Full Name"
-                            />
-                          </div>
-                        </div>
-                        <div className="grid items-center">
-                          <label
-                            htmlFor="country"
-                            className="block text-sm mb-2 dark:text-white"
-                          >
-                            Country
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="text"
-                              id="country"
-                              name="country"
-                              className="py-3 px-4 block w-full border border-gray-400 rounded-lg text-sm focus:border-red-500 focus:ring-red-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                              required
-                              placeholder="Full Name"
-                            />
-                          </div>
-                        </div>
-                        <div className="grid items-center">
-                          <label
-                            htmlFor="email"
-                            className="block text-sm mb-2 dark:text-white"
-                          >
-                            Email
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="email"
-                              id="email"
-                              name="email"
-                              className="py-3 px-4 block w-full border border-gray-400 rounded-lg text-sm focus:border-red-500 focus:ring-red-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                              required
-                              placeholder="Email"
-                            />
-                          </div>
-                        </div>
-                        <div className="grid items-center">
-                          <label
-                            htmlFor="phoneNumber"
-                            className="block text-sm mb-2 dark:text-white"
-                          >
-                            Phone Number
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="tel"
-                              id="phoneNumber"
-                              name="phoneNumber"
-                              className="py-3 px-4 block w-full border border-gray-400 rounded-lg text-sm focus:border-red-500 focus:ring-red-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                              required
-                              placeholder="Phone Number"
-                            />
-                          </div>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button
-                          color="danger"
-                          variant="light"
-                          onPress={onClose}
-                        >
-                          Close
-                        </Button>
-                        <Button color="warning" onPress={onClose}>
-                          Add
-                        </Button>
-                      </ModalFooter>
+                      <Contact fetchContacts={fetchContacts} formOnly={true} onOpenChange={onOpenChange}/>
                     </>
                   )}
                 </ModalContent>

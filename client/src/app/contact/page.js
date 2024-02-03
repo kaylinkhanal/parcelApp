@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import ContactCard from "@/components/contactCard/page";
 import Layout from '@/components/layout/page'
 
-const page = () => {
+export const Contact = (props) => {
   const [contactList, setContactList] = useState([])
   const [selectedContact, setSelectedContact] = useState(null)
   const {userDetails} = useSelector(state=>state.user)
@@ -39,14 +39,15 @@ const page = () => {
     enableReinitialize: true,
     onSubmit: values => {
       addNewContact(values)
+      props?.onOpenChange()
+      props?.fetchContacts()
     },
   });
 
   
   return (
     <div> 
-      <Layout>
-    {contactList.length>0 && contactList.map((item)=>{
+    {contactList.length>0 && !props.formOnly && contactList.map((item)=>{
       return  <ContactCard setSelectedContact={setSelectedContact} selectedContact={selectedContact} item={item}/>
     })}
       <form  className='p-2' onSubmit={formik.handleSubmit}>
@@ -130,9 +131,15 @@ const page = () => {
         </div>
       </section>
       </form>
-      </Layout>
     </div>
   );
 };
 
-export default page;
+const ContactLayout = ()=>{
+  return (
+    <Layout>
+      <Contact/>
+    </Layout>
+  )
+}
+export default ContactLayout;

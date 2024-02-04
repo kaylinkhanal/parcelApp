@@ -42,7 +42,7 @@ const loginUser = async(req,res)=>{
                 token,
             })
         }else{
-            res.json({
+            res.status(403).json({
                 msg: 'Incorrect password'
             })
         }
@@ -59,23 +59,26 @@ const loginUser = async(req,res)=>{
 
 const changePassword = async (req,res)=>{
 try {
+
     const userId = req.params.id
     const {newPassword,oldPassword} = req.body
-    console.log(req.body)
+    //first check if userId exist
     const user = await User.findById(userId)
     if(!user){
         return res.status(404).json({
             msg:"Invalid user id"
         })
     }
+    //check if db oldPass equalst to entered old pass
     const match = await bcrypt.compare(oldPassword, user.password);
     if(!match){
         return res.status(401).json({
             msg:"Old password is incorrect"
         })
     }
-    
-    user.password = newPassword
+    // if everything is fine, hash the new pass and save to the db
+    const hashPass = await bcrypt.hash(newPassword, saltRounds )
+    user.password = hashPass
     await user.save()
     res.status(200).json({
         msg:"Password changed succesfully"

@@ -8,6 +8,7 @@ import Layout from '@/components/layout/page'
 
 export const Contact = (props) => {
   const [contactList, setContactList] = useState([])
+  const [defaultForm, setDefaultForm] = useState('add')
   const [selectedContact, setSelectedContact] = useState(null)
   const {userDetails} = useSelector(state=>state.user)
   const fetchContacts = async()=>{
@@ -15,18 +16,22 @@ export const Contact = (props) => {
     const data = await res.json()
     setContactList(data.contactList )
   }
+
   useEffect(()=>{
     fetchContacts()
   },[])
 
   const addNewContact = async(values)=> {
     values.userId = userDetails._id
- const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts/`,{
-       method: 'POST',
+    const res=  await fetch(`http://localhost:5000/contacts/`,{
+       method: defaultForm === 'add' ? 'POST' : 'PUT',
        headers: {'Content-Type':'application/json' },
        body: JSON.stringify(values)
      })
- if(res) fetchContacts()
+    if(res) {
+      if(props.formOnly)  props?.fetchContacts()
+      else fetchContacts()
+    }
      
     }
   const formik = useFormik({
@@ -40,15 +45,16 @@ export const Contact = (props) => {
     onSubmit: values => {
       addNewContact(values)
       props?.onOpenChange()
-      props?.fetchContacts()
+  
     },
   });
 
   
   return (
     <div> 
+
     {contactList.length>0 && !props.formOnly && contactList.map((item)=>{
-      return  <ContactCard setSelectedContact={setSelectedContact} selectedContact={selectedContact} item={item}/>
+      return  <ContactCard setDefaultForm={setDefaultForm} setSelectedContact={setSelectedContact} selectedContact={selectedContact} item={item}/>
     })}
       <form  className='p-2' onSubmit={formik.handleSubmit}>
       <section class="text-gray-600 body-font flex">

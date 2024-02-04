@@ -16,6 +16,12 @@
   }
 }
 
+
+.box{
+  background-color: antiquewhite;
+  padding: 10px;
+  border: 1px solid;
+}
 /* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(

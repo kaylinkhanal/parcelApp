@@ -4,7 +4,10 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Dropdown, 
 
 export default function ContactCard(props) {
   return (
-    <Link onClick={()=>props.setSelectedContact(props.item)}>
+    <Link onClick={()=>{
+      props.setSelectedContact(props.item);
+      props.setDefaultForm('edit')
+    }}>
  <Card className={ props.selectedContact?._id == props.item?._id ? "m-5 max-w-[400px] bg-orange-300 text-gray-600" : "m-5 max-w-[400px]"}>
       <CardHeader className="flex justify-between">
         <div className="flex flex-col">

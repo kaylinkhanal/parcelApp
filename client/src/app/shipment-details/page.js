@@ -22,16 +22,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
 import {Contact} from "@/app/contact/page";
-
+import axios from 'axios';
 const ShipmentDetails = () => {
   const { userDetails } = useSelector((state) => state.user);
   const [contactList, setContactList] = useState([]);
   const fetchContacts = async () => {
-    const res = await fetch(
+    const {data} = await axios.get(
       `http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts?userId=` +
         userDetails._id
     );
-    const data = await res.json();
     setContactList(data.contactList);
   };
   useEffect(() => {

@@ -45,19 +45,19 @@ const page = () => {
               <div className="emai-phon flex flex-row space-x-16">
                 <div className="email">
                   <h6 className="text-lg font-semibold">Email</h6>
-                  <p>user@gmail.com</p>
+                  <p>{userDetails.email}</p>
                 </div>
               </div>
               <div className="emai-phon flex flex-row space-x-16">
                 <div className="email">
                   <h6 className="text-lg font-semibold">Phone Number</h6>
-                  <p>98********</p>
+                  <p>{userDetails.phoneNumber}</p>
                 </div>
               </div>
               <div className="emai-phon flex flex-row space-x-16">
                 <div className="email">
                   <h6 className="text-lg font-semibold">Role</h6>
-                  <p>User</p>
+                  <p>{userDetails.role}</p>
                 </div>
               </div>
 

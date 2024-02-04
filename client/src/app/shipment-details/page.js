@@ -22,13 +22,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
 import {Contact} from "@/app/contact/page";
+import URI from "@/config/api";
 
 const ShipmentDetails = () => {
   const { userDetails } = useSelector((state) => state.user);
   const [contactList, setContactList] = useState([]);
   const fetchContacts = async () => {
     const res = await fetch(
-      `http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts?userId=` +
+      `${URI}/contacts?userId=` +
         userDetails._id
     );
     const data = await res.json();

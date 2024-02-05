@@ -7,6 +7,7 @@ import ContactCard from "@/components/contactCard/page";
 import Layout from '@/components/layout/page'
 
 export const Contact = (props) => {
+  const {favUser} = useSelector(state=>state.contact)
   const [contactList, setContactList] = useState([])
   const [defaultForm, setDefaultForm] = useState('add')
   const [selectedContact, setSelectedContact] = useState(null)
@@ -137,6 +138,11 @@ export const Contact = (props) => {
         </div>
       </section>
       </form>
+      <div style={{backgroundColor:'red'}}>
+        {favUser.map((item)=>{
+          return <li>{item.fullName}</li>
+        })}
+      </div>
     </div>
   );
 };

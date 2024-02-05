@@ -52,7 +52,7 @@ const Map=()=> {
 
   const LocationInput =()=>{
     return(
-      <div className=" g-3">
+      <div>
         <Input
         className='mt-2'
           classNames={{
@@ -79,6 +79,7 @@ const Map=()=> {
           startContent={<SearchIcon size={18} />}
           type="search"
         />
+        <Button className='bg-white mt-2' onClick={()=>handleDiv()}>Proceed</Button><br/>
       </div>
     )
   }
@@ -103,8 +104,8 @@ const Map=()=> {
     >
         <div className={styles.map}>
         <Button className='bg-white'><IoMdArrowRoundBack /></Button><br/>
-        <Button className='mt-2' onClick={()=>handleDiv()}><IoMdArrowRoundBack /></Button>
-        {open ?<LocationInput/>:null}
+        
+        {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>Search pickup/destinaton</Button>}
         
         </div>
     </GoogleMap>)

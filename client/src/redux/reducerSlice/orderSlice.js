@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   shipmentDetails : {},
   locationDetails: {},
-  deliveryTiming: {}
+  deliveryTiming: {},
+  step: 1
 }
 export const orderSlice = createSlice({
   name: 'order',
@@ -13,6 +14,12 @@ export const orderSlice = createSlice({
       return {
         ...state,
         shipmentDetails: action.payload
+      }
+    },
+    setStep: (state, action) => {
+      return {
+        ...state,
+        step: action.payload
       }
     },
     addDeliveryTiming: (state, action) => {
@@ -26,5 +33,5 @@ export const orderSlice = createSlice({
     },
 }});
 
-export const { addShipmentDetails,addDeliveryTiming } = orderSlice.actions;
+export const { addShipmentDetails,addDeliveryTiming,setStep } = orderSlice.actions;
 export default orderSlice.reducer;

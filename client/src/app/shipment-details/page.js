@@ -2,9 +2,11 @@
 import {
   addShipmentDetails,
   addDeliveryTiming,
+  setStep
 } from "@/redux/reducerSlice/orderSlice";
 import Layout from "@/components/layout/page";
 import React, { useState, useEffect } from "react";
+import Map from '@/components/map/page'
 import {
   Select,
   SelectSection,
@@ -25,6 +27,7 @@ import {Contact} from "@/app/contact/page";
 import axios from 'axios';
 const ShipmentDetails = () => {
   const { userDetails } = useSelector((state) => state.user);
+  const { step } = useSelector((state) => state.order);
   const [contactList, setContactList] = useState([]);
   const fetchContacts = async () => {
     const {data} = await axios.get(
@@ -44,7 +47,7 @@ const ShipmentDetails = () => {
   const [weight, setWeight] = useState("");
   const [unit, setUnit] = useState("kg");
   const [parcelInput, setParcelInput] = useState("");
-  const [step, setStep] = useState(1);
+ 
   const handleOptionSelect = (option) => {
     setSelectedOption(option === selectedOption ? null : option);
   };
@@ -64,14 +67,14 @@ const ShipmentDetails = () => {
   };
 
   const handleBack = () => {
-    setStep(step - 1);
+    dispatch(setStep(step - 1));
   };
 
   const handleProceed = () => {
     if (step === 1) {
       handleSave();
     }
-    setStep(step + 1);
+    dispatch(setStep(step + 1));
   };
   const ShipmentInfo = () => {
     return (
@@ -210,8 +213,11 @@ const ShipmentDetails = () => {
   );
   return (
     <div>
-      <Layout>
-        <div className="p-30 m-10">
+      {step == 3 ? (
+        <Map/>
+      ): (
+        <Layout>
+        <div>
           {step == 1 && <ShipmentInfo />}
           {step == 2 && <TimeContactPicker />}
           <br />
@@ -225,6 +231,8 @@ const ShipmentDetails = () => {
           </div>
         </div>
       </Layout>
+      )}
+    
     </div>
   );
 };

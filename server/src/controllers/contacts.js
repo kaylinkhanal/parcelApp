@@ -10,4 +10,9 @@ const addNewContact = async(req,res)=>{
    res.json({msg: 'User created successfully'})
 }
 
-module.exports= {addNewContact,getContactsById}
+const editContactById= async(req,res)=>{
+   await Contact.findByIdAndUpdate(req.body._id, req.body)
+   res.json({msg: 'User edited successfully'})
+}
+
+module.exports= {addNewContact,getContactsById,editContactById}

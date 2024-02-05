@@ -1,8 +1,10 @@
 const express = require('express')
 router = express.Router()
-const {addNewContact ,getAllContacts }  = require('../controllers/contact')
+const {addNewContact,getContactsById,editContactById}  = require('../controllers/contacts')
 
 router.post('/contacts', addNewContact)
-router.get('/contacts', getAllContacts)
+router.put('/contacts', editContactById)
+router.get('/contacts', getContactsById)
+
 
 module.exports = router

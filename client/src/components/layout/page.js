@@ -7,7 +7,7 @@ const page = ({children}) => {
     <div>
     <Nav/>
    <section className="text-gray-600 body-font relative">
-  <div className="container mx-auto">
+  <div className="">
 
   
      

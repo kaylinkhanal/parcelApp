@@ -5,7 +5,7 @@ import styles from './styles.module.css'
 import { Button, Input } from '@nextui-org/react'
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux'
-import { setStep,setReceiverCoords } from '@/redux/reducerSlice/orderSlice'
+import { setStep, setSenderCoords, setReceiverCoords, setSenderAddrDetails, setReceiverAddrDetails } from '@/redux/reducerSlice/orderSlice'
 import axios from 'axios'
 
 export const SearchIcon = ({
@@ -46,7 +46,7 @@ export const SearchIcon = ({
 const Map=()=> {
   
   const dispatch = useDispatch()
-  const {step,receiverCoords} =useSelector(state=> state.order)
+  const {step, senderCoords, receiverCoords} =useSelector(state=> state.order)
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   })
@@ -56,8 +56,15 @@ const Map=()=> {
     console.log(open)
   }
 
-  const dragSender = (e)=>{
-      debugger;
+  const dragSender = async(e)=>{
+    const senderCoords = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    }
+    const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
+    const {city, country, formatted} = data.results[0]
+    dispatch(setSenderAddrDetails({city, country,formatted}))
+    dispatch(setSenderCoords(senderCoords))
   }
 
   const dragReceiver =async(e)=>{
@@ -67,7 +74,7 @@ const Map=()=> {
     }
     const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
     const {city, country, formatted} = data.results[0]
-    console.log(city, country,formatted)
+    dispatch(setReceiverAddrDetails({city, country,formatted}))
     dispatch(setReceiverCoords(receiverCoords))
   }
   const LocationInput =()=>{
@@ -127,19 +134,22 @@ const Map=()=> {
           <div className='h-2'>
           <Marker
           draggable={true}
+          onDragEnd={dragSender}
           icon={{
-            url: "/sender.png",
+            url: "/Sender.png",
+            scaledSize: new window.google.maps.Size(30,45)
           }}
-          position={{
-            lat: 27.700769,
-            lng: 85.300140
-          }}
+          position={senderCoords}
         />
           </div>
        
         <Marker
           draggable={true}
           onDragEnd	= {dragReceiver}
+          icon={{
+            url: "/Receiver.png",
+            scaledSize: new window.google.maps.Size(30,45)
+          }}
           position={receiverCoords}
         />
         {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>Search pickup/destinaton</Button>}

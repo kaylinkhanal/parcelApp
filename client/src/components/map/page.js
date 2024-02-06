@@ -1,9 +1,12 @@
 'use client'
 import React , { useState} from 'react'
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader ,Marker} from '@react-google-maps/api'
 import styles from './styles.module.css'
 import { Button, Input } from '@nextui-org/react'
 import { IoMdArrowRoundBack } from "react-icons/io";
+import { useDispatch, useSelector } from 'react-redux'
+import { setStep,setReceiverCoords } from '@/redux/reducerSlice/orderSlice'
+import axios from 'axios'
 
 export const SearchIcon = ({
   size = 24,
@@ -41,6 +44,9 @@ export const SearchIcon = ({
 
 
 const Map=()=> {
+  
+  const dispatch = useDispatch()
+  const {step,receiverCoords} =useSelector(state=> state.order)
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   })
@@ -50,6 +56,20 @@ const Map=()=> {
     console.log(open)
   }
 
+  const dragSender = (e)=>{
+      debugger;
+  }
+
+  const dragReceiver =async(e)=>{
+    const receiverCoords ={
+     lat: e.latLng.lat(),
+     lng: e.latLng.lng()
+    }
+    const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
+    const {city, country, formatted} = data.results[0]
+    console.log(city, country,formatted)
+    dispatch(setReceiverCoords(receiverCoords))
+  }
   const LocationInput =()=>{
     return(
       <div>
@@ -103,8 +123,25 @@ const Map=()=> {
           }}
     >
         <div className={styles.map}>
-        <Button className='bg-white'><IoMdArrowRoundBack /></Button><br/>
-        
+        <Button onClick={()=> dispatch(setStep(step-1))} className='bg-white'><IoMdArrowRoundBack /></Button><br/>
+          <div className='h-2'>
+          <Marker
+          draggable={true}
+          icon={{
+            url: "/sender.png",
+          }}
+          position={{
+            lat: 27.700769,
+            lng: 85.300140
+          }}
+        />
+          </div>
+       
+        <Marker
+          draggable={true}
+          onDragEnd	= {dragReceiver}
+          position={receiverCoords}
+        />
         {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>Search pickup/destinaton</Button>}
         
         </div>

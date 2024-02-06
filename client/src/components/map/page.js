@@ -1,12 +1,12 @@
-'use client'
-import React , { useState} from 'react'
-import { GoogleMap, useJsApiLoader ,Marker} from '@react-google-maps/api'
-import styles from './styles.module.css'
-import { Button, Input } from '@nextui-org/react'
+"use client";
+import React, { useState } from "react";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import styles from "./styles.module.css";
+import { Button, Input } from "@nextui-org/react";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { useDispatch, useSelector } from 'react-redux'
-import { setStep,setReceiverCoords } from '@/redux/reducerSlice/orderSlice'
-import axios from 'axios'
+import { useDispatch, useSelector } from "react-redux";
+import { setStep, setReceiverCoords } from "@/redux/reducerSlice/orderSlice";
+import axios from "axios";
 
 export const SearchIcon = ({
   size = 24,
@@ -42,39 +42,41 @@ export const SearchIcon = ({
   </svg>
 );
 
-
-const Map=()=> {
-  
-  const dispatch = useDispatch()
-  const {step,receiverCoords} =useSelector(state=> state.order)
+const Map = () => {
+  const dispatch = useDispatch();
+  const { step, receiverCoords } = useSelector((state) => state.order);
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
-  })
-  const [open, setopen] = useState(false)
-  const handleDiv=()=>{
-    setopen(!open)
-    console.log(open)
-  }
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+  });
+  const [open, setopen] = useState(false);
+  const handleDiv = () => {
+    setopen(!open);
+    console.log(open);
+  };
 
-  const dragSender = (e)=>{
-      debugger;
-  }
+  const dragSender = (e) => {
+    debugger;
+  };
 
-  const dragReceiver =async(e)=>{
-    const receiverCoords ={
-     lat: e.latLng.lat(),
-     lng: e.latLng.lng()
-    }
-    const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
-    const {city, country, formatted} = data.results[0]
-    console.log(city, country,formatted)
-    dispatch(setReceiverCoords(receiverCoords))
-  }
-  const LocationInput =()=>{
-    return(
+  const dragReceiver = async (e) => {
+    const receiverCoords = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    };
+    const { data } = await axios.get(
+      `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${
+        process.env.NEXT_PUBLIC_GEO_APIFY_KEY
+      }`
+    );
+    const { city, country, formatted } = data.results[0];
+    console.log(city, country, formatted);
+    dispatch(setReceiverCoords(receiverCoords));
+  };
+  const LocationInput = () => {
+    return (
       <div>
         <Input
-        className='mt-2'
+          className="mt-2"
           classNames={{
             base: "max-w-full sm:max-w-[10rem] h-10",
             mainWrapper: "h-full",
@@ -87,7 +89,7 @@ const Map=()=> {
           type="search"
         />
         <Input
-        className='mt-2'
+          className="mt-2"
           classNames={{
             base: "max-w-full sm:max-w-[10rem] h-10",
             mainWrapper: "h-full",
@@ -99,53 +101,71 @@ const Map=()=> {
           startContent={<SearchIcon size={18} />}
           type="search"
         />
-        <Button className='bg-white mt-2' onClick={()=>handleDiv()}>Proceed</Button><br/>
+        <Button className="bg-white mt-2" onClick={() => handleDiv()}>
+          Proceed
+        </Button>
+        <br />
       </div>
-    )
-  }
+    );
+  };
   if (loadError) {
-    return <div>Map cannot be loaded right now, sorry.</div>
-  }else if(isLoaded){
-    return (<GoogleMap
+    return <div>Map cannot be loaded right now, sorry.</div>;
+  } else if (isLoaded) {
+    return (
+      <GoogleMap
         mapContainerStyle={{
-            height: "100vh",
-            width: "100vw"
-          }}
-          zoom={13}
-          center={{
-            lat: 27.700769,
-            lng: 85.300140
-          }}
-          options={{
-            mapTypeControl: false,
-            streetViewControl: false,
-            
-          }}
-    >
+          height: "100vh",
+          width: "100vw",
+        }}
+        zoom={13}
+        center={{
+          lat: 27.700769,
+          lng: 85.30014,
+        }}
+        options={{
+          mapTypeControl: false,
+          streetViewControl: false,
+        }}
+      >
         <div className={styles.map}>
-        <Button onClick={()=> dispatch(setStep(step-1))} className='bg-white'><IoMdArrowRoundBack /></Button><br/>
-          <div className='h-2'>
-          <Marker
-          draggable={true}
-          icon={{
-            url: "/sender.png",
-          }}
-          position={{
-            lat: 27.700769,
-            lng: 85.300140
-          }}
-        />
+          <Button
+            onClick={() => dispatch(setStep(step - 1))}
+            className="bg-white"
+          >
+            <IoMdArrowRoundBack />
+          </Button>
+          <br />
+          <div className="h-2">
+            <Marker
+              draggable={true}
+              icon={{
+                url: "/markerA.png",
+              }}
+              position={{
+                lat: 27.700769,
+                lng: 85.30014,
+              }}
+            />
           </div>
-       
-        <Marker
-          draggable={true}
-          onDragEnd	= {dragReceiver}
-          position={receiverCoords}
-        />
-        {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>Search pickup/destinaton</Button>}
-        
+
+          <Marker
+            draggable={true}
+            icon={{
+              url: "/markerB.png",
+            }}
+            onDragEnd={dragReceiver}
+            position={receiverCoords}
+          />
+          {open ? (
+            <LocationInput />
+          ) : (
+            <Button className="mt-2" onClick={() => handleDiv()}>
+              Search pickup/destinaton
+            </Button>
+          )}
         </div>
-    </GoogleMap>)
+      </GoogleMap>
+    );
   }
-}
-export default Map
+};
+export default Map;

@@ -2,11 +2,11 @@
 import {
   addShipmentDetails,
   addDeliveryTiming,
-  setStep
+  setStep,
 } from "@/redux/reducerSlice/orderSlice";
 import Layout from "@/components/layout/page";
 import React, { useState, useEffect } from "react";
-import Map from '@/components/map/page'
+import Map from "@/components/map/page";
 import {
   Select,
   SelectSection,
@@ -23,14 +23,14 @@ import { FaFileAlt, FaBox } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
-import {Contact} from "@/app/contact/page";
-import axios from 'axios';
+import { Contact } from "@/app/contact/page";
+import axios from "axios";
 const ShipmentDetails = () => {
   const { userDetails } = useSelector((state) => state.user);
   const { step } = useSelector((state) => state.order);
   const [contactList, setContactList] = useState([]);
   const fetchContacts = async () => {
-    const {data} = await axios.get(
+    const { data } = await axios.get(
       `http://localhost:${process.env.NEXT_PUBLIC_API_URL}/contacts?userId=` +
         userDetails._id
     );
@@ -47,7 +47,7 @@ const ShipmentDetails = () => {
   const [weight, setWeight] = useState("");
   const [unit, setUnit] = useState("kg");
   const [parcelInput, setParcelInput] = useState("");
- 
+
   const handleOptionSelect = (option) => {
     setSelectedOption(option === selectedOption ? null : option);
   };
@@ -178,7 +178,11 @@ const ShipmentDetails = () => {
           </div>
           <label className="font-medium text-gray-600 mb-2">Receiver</label>
           <div className="flex grid-cols-2 gap-3 items-center">
-            <Select variant="bordered" label="Pick receiver contact" className="max-w-xs">
+            <Select
+              variant="bordered"
+              label="Pick receiver contact"
+              className="max-w-xs"
+            >
               {contactList?.map((item) => (
                 <SelectItem key={item._id} value={item.fullName}>
                   {item.fullName}
@@ -187,8 +191,12 @@ const ShipmentDetails = () => {
             </Select>
 
             <div className="flex flex-col gap-2">
-              <Button color="warning" onPress={onOpen} className="font-semibold text-gray-100 max-w-fit">
-              Add
+              <Button
+                color="warning"
+                onPress={onOpen}
+                className="font-semibold text-gray-100 max-w-fit"
+              >
+                Add
               </Button>
 
               <Modal
@@ -200,7 +208,11 @@ const ShipmentDetails = () => {
                 <ModalContent value="center">
                   {(onClose) => (
                     <>
-                      <Contact fetchContacts={fetchContacts} formOnly={true} onOpenChange={onOpenChange}/>
+                      <Contact
+                        fetchContacts={fetchContacts}
+                        formOnly={true}
+                        onOpenChange={onOpenChange}
+                      />
                     </>
                   )}
                 </ModalContent>
@@ -214,25 +226,24 @@ const ShipmentDetails = () => {
   return (
     <div>
       {step == 3 ? (
-        <Map/>
-      ): (
+        <Map />
+      ) : (
         <Layout>
-        <div>
-          {step == 1 && <ShipmentInfo />}
-          {step == 2 && <TimeContactPicker />}
-          <br />
-          <div className="flex items-center justify-center ">
-            <Button className="bg-orange-200 m-10" onClick={handleBack}>
-              Back
-            </Button>
-            <Button className="bg-orange-200 m-10" onClick={handleProceed}>
-              Proceed
-            </Button>
+          <div>
+            {step == 1 && <ShipmentInfo />}
+            {step == 2 && <TimeContactPicker />}
+            <br />
+            <div className="flex items-center justify-center ">
+              <Button className="bg-orange-200 m-10" onClick={handleBack}>
+                Back
+              </Button>
+              <Button className="bg-orange-200 m-10" onClick={handleProceed}>
+                Proceed
+              </Button>
+            </div>
           </div>
-        </div>
-      </Layout>
+        </Layout>
       )}
-    
     </div>
   );
 };

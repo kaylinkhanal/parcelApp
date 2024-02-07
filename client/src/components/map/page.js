@@ -156,7 +156,7 @@ const Map = () => {
             <Marker
               draggable={true}
               icon={{
-                url: "/markerA.png",
+                url: "/sernderMarker.png",
               }}
               onDragEnd={dragSender}
               position={senderCoords}
@@ -166,7 +166,7 @@ const Map = () => {
           <Marker
             draggable={true}
             icon={{
-              url: "/markerB.png",
+              url: "/receiverMarker.png",
             }}
             onDragEnd={dragReceiver}
             position={receiverCoords}

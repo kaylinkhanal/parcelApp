@@ -129,7 +129,7 @@ const Map=()=> {
           draggable={true}
           icon={{
             url: "/sender.png",
-            scaledSize: {width:100, height:150}
+            scaledSize: {width:70, height:100}
           }}
           position={{
             lat: 27.700769,
@@ -142,7 +142,7 @@ const Map=()=> {
           draggable={true}
           icon={{
             url: "/receiver.png",
-            scaledSize: {width:100, height:150}
+            scaledSize: {width:70, height:100}
           }}
           onDragEnd	= {dragReceiver}
           position={receiverCoords}

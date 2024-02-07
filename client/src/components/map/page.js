@@ -5,7 +5,11 @@ import styles from "./styles.module.css";
 import { Button, Input } from "@nextui-org/react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
-import { setStep, setReceiverCoords } from "@/redux/reducerSlice/orderSlice";
+import {
+  setStep,
+  setReceiverCoords,
+  setSenderCoords,
+} from "@/redux/reducerSlice/orderSlice";
 import axios from "axios";
 
 export const SearchIcon = ({
@@ -44,7 +48,9 @@ export const SearchIcon = ({
 
 const Map = () => {
   const dispatch = useDispatch();
-  const { step, receiverCoords } = useSelector((state) => state.order);
+  const { step, receiverCoords, senderCoords } = useSelector(
+    (state) => state.order
+  );
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
   });
@@ -54,8 +60,19 @@ const Map = () => {
     console.log(open);
   };
 
-  const dragSender = (e) => {
-    debugger;
+  const dragSender = async (e) => {
+    const senderCoords = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng(),
+    };
+    const { data } = await axios.get(
+      `https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${
+        process.env.NEXT_PUBLIC_GEO_APIFY_KEY
+      }`
+    );
+    const { city, country, formatted } = data.results[0];
+    console.log(city, country, formatted);
+    dispatch(setSenderCoords(senderCoords));
   };
 
   const dragReceiver = async (e) => {
@@ -141,10 +158,8 @@ const Map = () => {
               icon={{
                 url: "/markerA.png",
               }}
-              position={{
-                lat: 27.700769,
-                lng: 85.30014,
-              }}
+              onDragEnd={dragSender}
+              position={senderCoords}
             />
           </div>
 
@@ -160,7 +175,7 @@ const Map = () => {
             <LocationInput />
           ) : (
             <Button className="mt-2" onClick={() => handleDiv()}>
-              Search pickup/destinaton
+              Search pickup/destination
             </Button>
           )}
         </div>

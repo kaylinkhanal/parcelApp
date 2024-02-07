@@ -1,50 +1,63 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const defaultNationCords = {
   lat: 27.700769,
-  lng: 85.300140
-}
+  lng: 85.30014,
+};
 const initialState = {
-  shipmentDetails : {},
+  shipmentDetails: {},
   senderAddrDetails: {},
   receiverAddrDetails: {},
-  receiverCoords:defaultNationCords,
+  receiverCoords: defaultNationCords,
   senderCoords: defaultNationCords,
   deliveryTiming: {},
-  step: 1
-}
+  step: 1,
+};
 export const orderSlice = createSlice({
-  name: 'order',
+  name: "order",
   initialState,
   reducers: {
     addShipmentDetails: (state, action) => {
       return {
         ...state,
-        shipmentDetails: action.payload
-      }
+        shipmentDetails: action.payload,
+      };
     },
     setStep: (state, action) => {
       return {
         ...state,
-        step: action.payload
-      }
+        step: action.payload,
+      };
     },
     setReceiverCoords: (state, action) => {
       return {
         ...state,
-        receiverCoords: action.payload
-      }
+        receiverCoords: action.payload,
+      };
+    },
+    setSenderCoords: (state, action) => {
+      return {
+        ...state,
+        senderCoords: action.payload,
+      };
     },
     addDeliveryTiming: (state, action) => {
-        return {
-          ...state,
-          deliveryTiming:{
-            pickupDate: action.payload[0],
-            deliveryDate: action.payload[1]
-          }
-        }
+      return {
+        ...state,
+        deliveryTiming: {
+          pickupDate: action.payload[0],
+          deliveryDate: action.payload[1],
+        },
+      };
     },
-}});
+  },
+});
 
-export const { addShipmentDetails,addDeliveryTiming,setStep,setReceiverCoords } = orderSlice.actions;
+export const {
+  addShipmentDetails,
+  addDeliveryTiming,
+  setStep,
+  setSenderCoords,
+  setReceiverCoords,
+} = orderSlice.actions;
 export default orderSlice.reducer;

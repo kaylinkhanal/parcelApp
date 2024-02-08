@@ -39,6 +39,7 @@ export const orderSlice = createSlice({
       return {
         ...state,
         senderCoords: action.payload,
+        senderAddrDetails: action.payload,
       };
     },
     addDeliveryTiming: (state, action) => {

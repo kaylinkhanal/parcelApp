@@ -9,7 +9,10 @@ const initialState = {
   senderAddrDetails: {},
   receiverAddrDetails: {},
   receiverCoords:defaultNationCords,
-  senderCoords: defaultNationCords,
+  senderCoords: {
+    lat: 27.800769,
+    lng: 85.200140
+  },
   deliveryTiming: {},
   step: 1
 }

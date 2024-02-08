@@ -7,6 +7,7 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux'
 import { setStep, setSenderCoords, setReceiverCoords, setSenderAddrDetails, setReceiverAddrDetails } from '@/redux/reducerSlice/orderSlice'
 import axios from 'axios'
+import { getDistance } from 'geolib';
 
 export const SearchIcon = ({
   size = 24,
@@ -46,7 +47,7 @@ export const SearchIcon = ({
 const Map=()=> {
   
   const dispatch = useDispatch()
-  const {step, senderCoords, receiverCoords} =useSelector(state=> state.order)
+  const {step, shipmentDetails, senderCoords, receiverCoords,senderAddrDetails, receiverAddrDetails  } =useSelector(state=> state.order)
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
   })
@@ -57,6 +58,7 @@ const Map=()=> {
   }
 
   const dragSender = async(e)=>{
+    setopen(true)
     const senderCoords = {
       lat: e.latLng.lat(),
       lng: e.latLng.lng()
@@ -68,6 +70,7 @@ const Map=()=> {
   }
 
   const dragReceiver =async(e)=>{
+    setopen(true)
     const receiverCoords ={
      lat: e.latLng.lat(),
      lng: e.latLng.lng()
@@ -88,24 +91,45 @@ const Map=()=> {
             input: "text-small",
             inputWrapper: "h-full font-normal text-default-500 bg-white",
           }}
-          placeholder="Search pickup..."
+          value={senderAddrDetails.formatted }
+          placeholder="Sender Address..."
           size="smS"
           startContent={<SearchIcon size={18} />}
           type="search"
         />
         <Input
         className='mt-2'
+        value={receiverAddrDetails.formatted}
+
           classNames={{
             base: "max-w-full sm:max-w-[10rem] h-10",
             mainWrapper: "h-full",
             input: "text-small",
             inputWrapper: "h-full font-normal text-default-500 bg-white",
           }}
-          placeholder="Search destination..."
+          placeholder="Receiver Address..."
           size="sm"
           startContent={<SearchIcon size={18} />}
           type="search"
         />
+            <Input
+        className='mt-2'
+        value={(getDistance(
+          { latitude: senderCoords.lat, longitude: senderCoords.lng },
+          { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
+      )/1000)}
+
+          classNames={{
+            base: "max-w-full sm:max-w-[10rem] h-10",
+            mainWrapper: "h-full",
+            input: "text-small",
+            inputWrapper: "h-full font-normal text-default-500 bg-white",
+          }}
+          placeholder="Price"
+          size="sm"
+          type="search"
+        />
+       
         <Button className='bg-white mt-2' onClick={()=>handleDiv()}>Proceed</Button><br/>
       </div>
     )
@@ -136,8 +160,8 @@ const Map=()=> {
           draggable={true}
           onDragEnd={dragSender}
           icon={{
-            url: "/Sender.png",
-            scaledSize: new window.google.maps.Size(30,45)
+            url: "/sender.png",
+            scaledSize: {width:70, height:100}
           }}
           position={senderCoords}
         />
@@ -152,7 +176,9 @@ const Map=()=> {
           onDragEnd	= {dragReceiver}
           position={receiverCoords}
         />
-        {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>Search pickup/destinaton</Button>}
+        {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>
+          
+          Search pickup/destinaton</Button>}
         
         </div>
     </GoogleMap>)

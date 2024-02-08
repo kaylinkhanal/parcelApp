@@ -14,7 +14,8 @@ const page = () => {
           <div className="container px-340 py-48 mx-auto">
             <div className="flex flex-wrap -m-4 text-center">
               <div
-                onClick={() => router.push("/shipment-details")}
+                onClick={() => {
+                  router.push("/shipment-details")}}
                 className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer"
               >
                 <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">

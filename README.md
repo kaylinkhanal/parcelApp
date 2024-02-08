@@ -10,7 +10,7 @@ Phase 1
 - Order tracking by receiver
 - Order history
 - Sender receives notification when item is delivered
-- Pricing: Location+Weight+category+timing(7:00pm-7:00pm =>20%, emergency=>20%)
+- Pricing: Location+Weight+category
 - Live location tracking   (socket.io)
 
 

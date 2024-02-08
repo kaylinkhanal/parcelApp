@@ -29,10 +29,28 @@ export const orderSlice = createSlice({
         step: action.payload
       }
     },
+    setSenderCoords: (state, action) => {
+      return {
+        ...state,
+        senderCoords: action.payload
+      }
+    },
     setReceiverCoords: (state, action) => {
       return {
         ...state,
         receiverCoords: action.payload
+      }
+    },
+    setSenderAddrDetails: (state, action) => {
+      return {
+        ...state,
+        senderAddrDetails: action.payload
+      }
+    },
+    setReceiverAddrDetails: (state, action) => {
+      return {
+        ...state,
+        receiverAddrDetails: action.payload
       }
     },
     addDeliveryTiming: (state, action) => {
@@ -46,5 +64,5 @@ export const orderSlice = createSlice({
     },
 }});
 
-export const { addShipmentDetails,addDeliveryTiming,setStep,setReceiverCoords } = orderSlice.actions;
+export const { addShipmentDetails,addDeliveryTiming,setStep, setSenderCoords,setReceiverCoords, setSenderAddrDetails, setReceiverAddrDetails } = orderSlice.actions;
 export default orderSlice.reducer;

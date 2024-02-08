@@ -1,6 +1,6 @@
 'use client'
 import React , { useState} from 'react'
-import { GoogleMap, useJsApiLoader ,Marker} from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader ,Marker, MarkerF} from '@react-google-maps/api'
 import styles from './styles.module.css'
 import { Button, Input } from '@nextui-org/react'
 import { IoMdArrowRoundBack } from "react-icons/io";
@@ -145,11 +145,11 @@ const Map=()=> {
        
         <Marker
           draggable={true}
-          onDragEnd	= {dragReceiver}
           icon={{
-            url: "/Receiver.png",
-            scaledSize: new window.google.maps.Size(30,45)
+            url: "/receiver.png",
+            scaledSize: {width:70, height:100}
           }}
+          onDragEnd	= {dragReceiver}
           position={receiverCoords}
         />
         {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>Search pickup/destinaton</Button>}

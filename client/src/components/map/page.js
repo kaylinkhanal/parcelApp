@@ -114,10 +114,10 @@ const Map=()=> {
         />
             <Input
         className='mt-2'
-        value={(getDistance(
+        value={100 + 60 * (getDistance(
           { latitude: senderCoords.lat, longitude: senderCoords.lng },
           { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
-      )/1000)}
+      )/1000) + 10 * (shipmentDetails.weight)}
 
           classNames={{
             base: "max-w-full sm:max-w-[10rem] h-10",

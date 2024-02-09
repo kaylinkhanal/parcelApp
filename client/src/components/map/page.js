@@ -193,8 +193,8 @@ const Map = () => {
               draggable={true}
               onDragEnd={dragSender}
               icon={{
-                url: "/sender.png",
-                scaledSize: { width: 70, height: 100 },
+                url: "/senderMarker.png",
+                // scaledSize: { width: 70, height: 100 },
               }}
               position={senderCoords}
             />
@@ -203,8 +203,8 @@ const Map = () => {
           <Marker
             draggable={true}
             icon={{
-              url: "/receiver.png",
-              scaledSize: { width: 70, height: 100 },
+              url: "/receiverMarker.png",
+              // scaledSize: { width: 70, height: 100 },
             }}
             onDragEnd={dragReceiver}
             position={receiverCoords}

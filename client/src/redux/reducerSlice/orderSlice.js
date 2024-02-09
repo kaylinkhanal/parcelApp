@@ -44,13 +44,6 @@ export const orderSlice = createSlice({
         receiverCoords: action.payload,
       };
     },
-    setSenderCoords: (state, action) => {
-      return {
-        ...state,
-        senderCoords: action.payload,
-        senderAddrDetails: action.payload,
-      };
-    },
     setSenderAddrDetails: (state, action) => {
       return {
         ...state,

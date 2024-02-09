@@ -9,7 +9,10 @@ const initialState = {
   senderAddrDetails: {},
   receiverAddrDetails: {},
   receiverCoords: defaultNationCords,
-  senderCoords: defaultNationCords,
+  senderCoords: {
+    lat: 27.800769,
+    lng: 85.20014,
+  },
   deliveryTiming: {},
   step: 1,
 };
@@ -29,6 +32,12 @@ export const orderSlice = createSlice({
         step: action.payload,
       };
     },
+    setSenderCoords: (state, action) => {
+      return {
+        ...state,
+        senderCoords: action.payload,
+      };
+    },
     setReceiverCoords: (state, action) => {
       return {
         ...state,
@@ -40,6 +49,18 @@ export const orderSlice = createSlice({
         ...state,
         senderCoords: action.payload,
         senderAddrDetails: action.payload,
+      };
+    },
+    setSenderAddrDetails: (state, action) => {
+      return {
+        ...state,
+        senderAddrDetails: action.payload,
+      };
+    },
+    setReceiverAddrDetails: (state, action) => {
+      return {
+        ...state,
+        receiverAddrDetails: action.payload,
       };
     },
     addDeliveryTiming: (state, action) => {
@@ -60,5 +81,7 @@ export const {
   setStep,
   setSenderCoords,
   setReceiverCoords,
+  setSenderAddrDetails,
+  setReceiverAddrDetails,
 } = orderSlice.actions;
 export default orderSlice.reducer;

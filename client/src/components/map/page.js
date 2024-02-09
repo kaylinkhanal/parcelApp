@@ -1,16 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  useJsApiLoader,
+  Marker,
+  MarkerF,
+} from "@react-google-maps/api";
 import styles from "./styles.module.css";
 import { Button, Input } from "@nextui-org/react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setStep,
-  setReceiverCoords,
   setSenderCoords,
+  setReceiverCoords,
+  setSenderAddrDetails,
+  setReceiverAddrDetails,
 } from "@/redux/reducerSlice/orderSlice";
 import axios from "axios";
+import { getDistance } from "geolib";
 
 export const SearchIcon = ({
   size = 24,
@@ -48,9 +56,14 @@ export const SearchIcon = ({
 
 const Map = () => {
   const dispatch = useDispatch();
-  const { step, receiverCoords, senderCoords } = useSelector(
-    (state) => state.order
-  );
+  const {
+    step,
+    shipmentDetails,
+    senderCoords,
+    receiverCoords,
+    senderAddrDetails,
+    receiverAddrDetails,
+  } = useSelector((state) => state.order);
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
   });
@@ -61,6 +74,7 @@ const Map = () => {
   };
 
   const dragSender = async (e) => {
+    setopen(true);
     const senderCoords = {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
@@ -71,11 +85,12 @@ const Map = () => {
       }`
     );
     const { city, country, formatted } = data.results[0];
-    console.log(city, country, formatted);
+    dispatch(setSenderAddrDetails({ city, country, formatted }));
     dispatch(setSenderCoords(senderCoords));
   };
 
   const dragReceiver = async (e) => {
+    setopen(true);
     const receiverCoords = {
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
@@ -86,7 +101,7 @@ const Map = () => {
       }`
     );
     const { city, country, formatted } = data.results[0];
-    console.log(city, country, formatted);
+    dispatch(setReceiverAddrDetails({ city, country, formatted }));
     dispatch(setReceiverCoords(receiverCoords));
   };
   const LocationInput = () => {
@@ -100,24 +115,45 @@ const Map = () => {
             input: "text-small",
             inputWrapper: "h-full font-normal text-default-500 bg-white",
           }}
-          placeholder="Search pickup..."
+          value={senderAddrDetails.formatted}
+          placeholder="Sender Address..."
           size="smS"
           startContent={<SearchIcon size={18} />}
           type="search"
         />
         <Input
           className="mt-2"
+          value={receiverAddrDetails.formatted}
           classNames={{
             base: "max-w-full sm:max-w-[10rem] h-10",
             mainWrapper: "h-full",
             input: "text-small",
             inputWrapper: "h-full font-normal text-default-500 bg-white",
           }}
-          placeholder="Search destination..."
+          placeholder="Receiver Address..."
           size="sm"
           startContent={<SearchIcon size={18} />}
           type="search"
         />
+        <Input
+          className="mt-2"
+          value={
+            getDistance(
+              { latitude: senderCoords.lat, longitude: senderCoords.lng },
+              { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
+            ) / 1000
+          }
+          classNames={{
+            base: "max-w-full sm:max-w-[10rem] h-10",
+            mainWrapper: "h-full",
+            input: "text-small",
+            inputWrapper: "h-full font-normal text-default-500 bg-white",
+          }}
+          placeholder="Price"
+          size="sm"
+          type="search"
+        />
+
         <Button className="bg-white mt-2" onClick={() => handleDiv()}>
           Proceed
         </Button>
@@ -155,10 +191,11 @@ const Map = () => {
           <div className="h-2">
             <Marker
               draggable={true}
-              icon={{
-                url: "/sernderMarker.png",
-              }}
               onDragEnd={dragSender}
+              icon={{
+                url: "/sender.png",
+                scaledSize: { width: 70, height: 100 },
+              }}
               position={senderCoords}
             />
           </div>
@@ -166,7 +203,8 @@ const Map = () => {
           <Marker
             draggable={true}
             icon={{
-              url: "/receiverMarker.png",
+              url: "/receiver.png",
+              scaledSize: { width: 70, height: 100 },
             }}
             onDragEnd={dragReceiver}
             position={receiverCoords}
@@ -175,7 +213,7 @@ const Map = () => {
             <LocationInput />
           ) : (
             <Button className="mt-2" onClick={() => handleDiv()}>
-              Search pickup/destination
+              Search pickup/destinaton
             </Button>
           )}
         </div>

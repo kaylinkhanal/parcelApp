@@ -1,17 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const defaultNationCords = {
-  lat: 27.700769,
-  lng: 85.30014,
-};
+// const defaultNationCords = {
+//   lat: 27.700769,
+//   lng: 85.30014,
+// };
 const initialState = {
   shipmentDetails: {},
   senderAddrDetails: {},
   receiverAddrDetails: {},
-  receiverCoords: defaultNationCords,
+  // receiverCoords: defaultNationCords,
+  receiverCoords: {},
   senderCoords: {
-    lat: 27.800769,
-    lng: 85.20014,
+    // lat: 27.800769,
+    // lng: 85.20014,
   },
   deliveryTiming: {},
   step: 1,

@@ -1,0 +1,14 @@
+{
+    "rider": [
+        {"label": "order history", "link": "/order"},
+        {"label": "order history", "link": "/order"},
+        {"label": "order history", "link": "/order"},
+        {"label": "order history", "link": "/order"}
+    ],
+    "admin": [
+        {"label": "ongoing orders", "link": "/ordering"},
+        {"label": "order history", "link": "/order"},
+        {"label": "order history", "link": "/order"},
+        {"label": "order history", "link": "/order"}
+    ]
+}

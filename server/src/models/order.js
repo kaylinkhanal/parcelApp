@@ -4,8 +4,12 @@ const { Schema } = mongoose;
 const orderSchema = new Schema({
   orderDetails: Object,
   senderId: String,
-  receiverDetails : Object,
-  
+  senderCoords: Object,
+  senderAddr: String,
+  receiverCoords: Object,
+  receiverId: String,
+  receiverAddr: String,
+  shipmentDetails: Object
 });
 
 const Order = mongoose.model('Order', orderSchema);

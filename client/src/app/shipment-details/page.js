@@ -7,6 +7,10 @@ import {
 import Layout from "@/components/layout/page";
 import React, { useState, useEffect } from "react";
 import Map from "@/components/map/page";
+import locale from "antd/locale/zh_CN";
+import dayjs from "dayjs";
+
+import "dayjs/locale/zh-cn";
 import ShipmentInfo from "@/components/shipmentForm/page";
 import {
   Select,
@@ -26,6 +30,82 @@ import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
 import { Contact } from "@/app/contact/page";
 import axios from "axios";
+
+const TimeContactPicker = (props) => {
+  const dispatch = useDispatch();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { contactList, fetchContacts } = props;
+  return (
+    <div className="flex flex-col items-center">
+      <h1 className="font-bold text-xl mb-7">Receiver Details</h1>
+      <div className="bg-gray-50 w-lg flex justify-center p-10 border rounded-lg">
+        <Space direction="vertical" size={12}>
+          <div className="grid m-2">
+            <label className="font-medium text-gray-600 mb-2">
+              Select Date
+            </label>
+            <RangePicker
+              showTime
+              defaultValue={[
+                dayjs("2015-01-01", "YYYY-MM-DD"),
+                dayjs("2015-01-01", "YYYY-MM-DD"),
+              ]}
+              onChange={(_, dates) => dispatch(addDeliveryTiming(dates))}
+            />
+          </div>
+          <label className="font-medium text-gray-600 mb-2">Receiver</label>
+          <div className="flex grid-cols-2 gap-3 items-center">
+            <Select
+              variant="bordered"
+              label="Pick receiver contact"
+              className="max-w-xs"
+            >
+              {contactList?.map((item) => (
+                <SelectItem
+                  onClick={() => alert(item._id)}
+                  key={item._id}
+                  value={item.fullName}
+                >
+                  {item.fullName}
+                </SelectItem>
+              ))}
+            </Select>
+
+            <div className="flex flex-col gap-2">
+              <Button
+                color="warning"
+                onPress={onOpen}
+                className="font-semibold text-gray-100 max-w-fit"
+              >
+                Add
+              </Button>
+
+              <Modal
+                backdrops="blur"
+                isOpen={isOpen}
+                placement="center"
+                onOpenChange={onOpenChange}
+              >
+                <ModalContent value="center">
+                  {(onClose) => (
+                    <>
+                      <Contact
+                        fetchContacts={fetchContacts}
+                        formOnly={true}
+                        onOpenChange={onOpenChange}
+                      />
+                    </>
+                  )}
+                </ModalContent>
+              </Modal>
+            </div>
+          </div>
+        </Space>
+      </div>
+    </div>
+  );
+};
+
 const ShipmentDetails = () => {
   const { userDetails } = useSelector((state) => state.user);
   const { step } = useSelector((state) => state.order);
@@ -80,67 +160,6 @@ const ShipmentDetails = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const TimeContactPicker = () => (
-    <div className="flex flex-col items-center">
-      <h1 className="font-bold text-xl mb-7">Receiver Details</h1>
-      <div className="bg-gray-50 w-lg flex justify-center p-10 border rounded-lg">
-        <Space direction="vertical" size={12}>
-          <div className="grid m-2">
-            <label className="font-medium text-gray-600 mb-2">
-              Select Date
-            </label>
-            <RangePicker
-              showTime
-              onChange={(_, dates) => dispatch(addDeliveryTiming(dates))}
-            />
-          </div>
-          <label className="font-medium text-gray-600 mb-2">Receiver</label>
-          <div className="flex grid-cols-2 gap-3 items-center">
-            <Select
-              variant="bordered"
-              label="Pick receiver contact"
-              className="max-w-xs"
-            >
-              {contactList?.map((item) => (
-                <SelectItem key={item._id} value={item.fullName}>
-                  {item.fullName}
-                </SelectItem>
-              ))}
-            </Select>
-
-            <div className="flex flex-col gap-2">
-              <Button
-                color="warning"
-                onPress={onOpen}
-                className="font-semibold text-gray-100 max-w-fit"
-              >
-                Add
-              </Button>
-
-              <Modal
-                backdrops="blur"
-                isOpen={isOpen}
-                placement="center"
-                onOpenChange={onOpenChange}
-              >
-                <ModalContent value="center">
-                  {(onClose) => (
-                    <>
-                      <Contact
-                        fetchContacts={fetchContacts}
-                        formOnly={true}
-                        onOpenChange={onOpenChange}
-                      />
-                    </>
-                  )}
-                </ModalContent>
-              </Modal>
-            </div>
-          </div>
-        </Space>
-      </div>
-    </div>
-  );
   return (
     <div>
       {step == 3 ? (
@@ -164,7 +183,14 @@ const ShipmentDetails = () => {
                 setParcelImg={setParcelImg}
               />
             )}
-            {step == 2 && <TimeContactPicker />}
+            {step == 2 && (
+              <TimeContactPicker
+                contactList={contactList}
+                onOpen={onOpen}
+                onOpenChange={onOpenChange}
+                fetchContacts={fetchContacts}
+              />
+            )}
             <br />
             <div className="flex items-center justify-center ">
               <Button className="bg-orange-200 m-10" onClick={handleBack}>

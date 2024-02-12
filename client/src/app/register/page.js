@@ -7,6 +7,8 @@ import styles from './styles.module.css'
 import {  toast } from 'react-toastify';
 import Layout from '@/components/layout/page'
 import { useRouter } from 'next/navigation'
+import {RadioGroup, Radio} from "@nextui-org/react";
+
 const SignupForm = () => {
   const router = useRouter()
 
@@ -42,16 +44,21 @@ const SignupForm = () => {
   });
 
   return (
-    <Layout>
+       <Layout>
+    <div className=" flex items-center justify-center">
     <form  className={styles.formfields} onSubmit={formik.handleSubmit}>
-      <h2>Register</h2>
+      <h2 className='text-xl m-6 font-extrabold subpixel-antialiased text-orange-500'>Create new Account</h2>
+      <div className="">
+
+     
       <Input 
        id="phoneNumber"
-       label="phoneNumber"
+       label="PhoneNumber"
        name="phoneNumber"
        type="text"
        onChange={formik.handleChange}
        value={formik.values.phoneNumber}
+       className='m-2'
       />
         {formik?.errors.phoneNumber}
       <Input 
@@ -60,7 +67,9 @@ const SignupForm = () => {
        type="text"
        onChange={formik.handleChange}
        value={formik.values.email}
-      label="email" />
+      label="Email" 
+      className='m-2'
+      />
               {formik?.errors.email}
          <Input 
        id="password"
@@ -68,17 +77,25 @@ const SignupForm = () => {
        type="password"
        onChange={formik.handleChange}
        value={formik.values.password}
-      label="password" />
-          <Input 
-       id="role"
-       name="role"
-       type="text"
-       onChange={formik.handleChange}
-       value={formik.values.role}
-      label="role" />
-      <Button type="submit">Submit</Button>
+      label="Password" 
+      className='m-2'
+      />
+        <RadioGroup
+        className='m-2 '
+      label="Select your Role:"
+      color='warning'
+      onValueChange={formik.handleChange('role')}
+                     value={formik.values.role}
+    >
+      <Radio value="user">User</Radio>
+      <Radio value="rider">Rider</Radio>
+    </RadioGroup>
+      <Button className='m-2 bg-orange-300' type="submit">Submit</Button>
+      </div>
     </form>
+    </div>
   </Layout>
+   
   );
 };
 

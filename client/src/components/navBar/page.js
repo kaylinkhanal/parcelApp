@@ -45,8 +45,11 @@ export default function App() {
       <div>
       <Dropdown placement="bottom-end">
         <DropdownTrigger>
+         <div>
           <Avatar
             isBordered
+            id="avatar"
+            key="avatar"
             as="button"
             className="transition-transform"
             color="secondary"
@@ -54,6 +57,7 @@ export default function App() {
             size="sm"
             src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
           />
+          </div>
         </DropdownTrigger>
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           <DropdownItem key="profile" className="h-14 gap-2">

@@ -63,44 +63,6 @@ const Map = () => {
   });
   const [open, setopen] = useState(false);
 
-  // to get the users current location
-  const getCurrentLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const senderCoords = { lat: latitude, lng: longitude };
-          // setting reeiver coordinates near to sender coordinates
-          const receiverCoords = {
-            lat: latitude + 0.005,
-            lng: longitude + 0.005,
-          };
-          dispatch(setSenderCoords(senderCoords));
-          dispatch(setReceiverCoords(receiverCoords));
-        },
-        (error) => {
-          alert("Error getting user's location:", error);
-          // set to default coordinates
-          handleErrorCoordinates();
-        }
-      );
-    } else {
-      alert("Geolocation is not supported by this browser.");
-      handleErrorCoordinates();
-    }
-  };
-
-  const handleErrorCoordinates = () => {
-    const defaultSenderCoords = { lat: 27.7, lng: 85.3 };
-    const defaultReceiverCoords = { lat: 27.705, lng: 85.305 };
-    dispatch(setSenderCoords(defaultSenderCoords));
-    dispatch(setReceiverCoords(defaultReceiverCoords));
-  };
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, []);
-
   const handleDiv = () => {
     setopen(!open);
     console.log(open);

@@ -1,7 +1,10 @@
 'use client'
 import React from 'react'
 import { FaFileAlt, FaBox } from "react-icons/fa";
+import {setParcelImg} from '@/redux/reducerSlice/orderSlice'
+import { useDispatch } from 'react-redux';
 const ShipmentInfo = (props) => {
+  const dispatch = useDispatch()
     const {selectedOption,
         setSelectedOption,
         parcelInput,
@@ -13,7 +16,7 @@ const ShipmentInfo = (props) => {
         unit,
         setUnit,
         chargeableWeight,
-        setParcelImg} =props
+        } =props
     return (
       <div className="flex flex-col items-center justify-center">
         <form id="shipment" name="shipment">
@@ -106,8 +109,8 @@ const ShipmentInfo = (props) => {
           <input
             type="file"
             onChange={(e) =>{
-                e.preventDefault()
-                setParcelImg(e.target.files[0])}}
+                // e.preventDefault()
+                dispatch(setParcelImg(e.target.files[0]))}}
           />
         </p>
         </form>

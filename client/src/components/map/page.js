@@ -52,7 +52,7 @@ const LocationInput =()=>{
   const {pricePerUnitKm, basePrice, pricePerUnitKg} = priceMap
   const dispatch = useDispatch()
   const [searchResult ,setSearchResult]= useState([])
-  const {step, shipmentDetails, senderCoords, receiverCoords,senderAddr, receiverAddr  } =useSelector(state=> state.order)
+  const {step, shipmentDetails, senderCoords, receiverCoords,senderAddr, receiverAddr, deliveryTiming  } =useSelector(state=> state.order)
   const handlePlaceChange = ()=> {
     const placeInfo = searchResult.getPlace();
     const  {lat, lng} = placeInfo.geometry.location
@@ -82,9 +82,59 @@ const LocationInput =()=>{
             <>
               <ModalHeader className="flex flex-col gap-1">Confirm Order Details</ModalHeader>
               <ModalBody>
-                <p> 
-               {JSON.stringify({step, shipmentDetails, senderCoords, receiverCoords,senderAddr, receiverAddr})}
-                </p>
+                <div className='container mx-auto '>
+                  <div className='section mb-2'>
+                    <h2 className='section-title text-lg font-semibold mb-2'>Shipment Details</h2>
+                    <div className='grid grid-cols-2 gap-2'>
+                      <div>
+                        <p className='text-base font-semibold'>Item type:</p>
+                        <p className='text-base'>{shipmentDetails.selectedOption}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Pieces:</p>
+                        <p className='text-base'>{shipmentDetails.pieces}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Weight:</p>
+                        <p className='text-base'>{shipmentDetails.weight} {shipmentDetails.unit}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='section mb-2'>
+                    <h2 className='section-title text-lg font-semibold mb-2'>Addresses & Dates</h2>
+                    <div className='grid grid-cols-2 gap-2'>
+                      <div>
+                        <p className='text-base font-semibold'>Sender address:</p>
+                        <p className='text-base'>{senderAddr}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Receiver address:</p>
+                        <p className='text-base'>{receiverAddr}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Pickup date:</p>
+                        <p className='text-base'>{deliveryTiming.pickupDate}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Delivery date:</p>
+                        <p className='text-base'>{deliveryTiming.deliveryDate}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='section'>
+                    <h2 className='section-title text-lg font-semibold mb-2'>Charges & Distance</h2>
+                    <div className='grid grid-cols-2 gap-2'>
+                      <div>
+                        <p className='text-base font-semibold'>Total charge:</p>
+                        <p className='text-base'>NPR. {price}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Total distance:</p>
+                        <p className='text-base'>{distance} KM</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onPress={onClose}>

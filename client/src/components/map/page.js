@@ -1,14 +1,14 @@
 'use client'
 import React , { useState} from 'react'
-import { GoogleMap, useJsApiLoader ,Marker, MarkerF} from '@react-google-maps/api'
+import { GoogleMap, Autocomplete, useJsApiLoader ,Marker, MarkerF} from '@react-google-maps/api'
 import styles from './styles.module.css'
 import { Button, Input } from '@nextui-org/react'
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux'
-import { setStep, setSenderCoords, setReceiverCoords, setSenderAddrDetails, setReceiverAddrDetails } from '@/redux/reducerSlice/orderSlice'
+import { setStep, setSenderCoords, setReceiverCoords, setSenderAddr, setReceiverAddr } from '@/redux/reducerSlice/orderSlice'
 import axios from 'axios'
 import { getDistance } from 'geolib';
-
+const libraries =["places"]
 export const SearchIcon = ({
   size = 24,
   strokeWidth = 1.5,
@@ -43,13 +43,90 @@ export const SearchIcon = ({
   </svg>
 );
 
+const LocationInput =()=>{
+  const dispatch = useDispatch()
+  const [searchResult ,setSearchResult]= useState([])
+  const {step, shipmentDetails, senderCoords, receiverCoords,senderAddr, receiverAddr  } =useSelector(state=> state.order)
+  const handlePlaceChange = ()=> {
+    const placeInfo = searchResult.getPlace();
+    const  {lat, lng} = placeInfo.geometry.location
+    dispatch(setReceiverAddr( placeInfo.formatted_address))
+    dispatch(setReceiverCoords({lat: lat(), lng:lng()}))
+  }
+
+  function onLoad(autocomplete) {
+    setSearchResult(autocomplete);
+  }
+  return(
+    <div>
+              <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceChange}>
+              <Input
+      className='mt-2'
+        classNames={{
+          base: "max-w-full sm:max-w-[10rem] h-10",
+          mainWrapper: "h-full",
+          input: "text-small",
+          inputWrapper: "h-full font-normal text-default-500 bg-white",
+        }}
+        value={senderAddr }
+        placeholder="Sender Address..."
+        onChange={(e)=>  dispatch(setSenderAddr( e.target.value))}
+        size="smS"
+        startContent={<SearchIcon size={18} />}
+        type="search"
+      />
+              </Autocomplete>
+              <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceChange}>
+              <Input
+      className='mt-2'
+        classNames={{
+          base: "max-w-full sm:max-w-[10rem] h-10",
+          mainWrapper: "h-full",
+          input: "text-small",
+          inputWrapper: "h-full font-normal text-default-500 bg-white",
+        }}
+        value={receiverAddr }
+        placeholder="Receiver Address..."
+        onChange={(e)=>  dispatch(setReceiverAddr( e.target.value))}
+        size="smS"
+        startContent={<SearchIcon size={18} />}
+        type="search"
+      />
+              </Autocomplete>
+   
+   
+
+      <Input
+      className='mt-2'
+      value={100 + 60 * (getDistance(
+        { latitude: senderCoords.lat, longitude: senderCoords.lng },
+        { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
+    )/1000) + 10 * (shipmentDetails.weight)}
+
+        classNames={{
+          base: "max-w-full sm:max-w-[10rem] h-10",
+          mainWrapper: "h-full",
+          input: "text-small",
+          inputWrapper: "h-full font-normal text-default-500 bg-white",
+        }}
+        placeholder="Price"
+        size="sm"
+        type="search"
+      />
+      
+     
+      <Button className='bg-white mt-2' onClick={()=>handleDiv()}>Proceed</Button><br/>
+    </div>
+  )
+}
 
 const Map=()=> {
   
   const dispatch = useDispatch()
   const {step, shipmentDetails, senderCoords, receiverCoords,senderAddrDetails, receiverAddrDetails  } =useSelector(state=> state.order)
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+    libraries
   })
   const [open, setopen] = useState(false)
   const handleDiv=()=>{
@@ -64,8 +141,8 @@ const Map=()=> {
       lng: e.latLng.lng()
     }
     const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
-    const {city, country, formatted} = data.results[0]
-    dispatch(setSenderAddrDetails({city, country,formatted}))
+    const {formatted} = data.results[0]
+    dispatch(setSenderAddr(formatted))
     dispatch(setSenderCoords(senderCoords))
   }
 
@@ -76,64 +153,11 @@ const Map=()=> {
      lng: e.latLng.lng()
     }
     const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
-    const {city, country, formatted} = data.results[0]
-    dispatch(setReceiverAddrDetails({city, country,formatted}))
+    const {formatted} = data.results[0]
+    dispatch(setReceiverAddr(formatted))
     dispatch(setReceiverCoords(receiverCoords))
   }
-  const LocationInput =()=>{
-    return(
-      <div>
-        <Input
-        className='mt-2'
-          classNames={{
-            base: "max-w-full sm:max-w-[10rem] h-10",
-            mainWrapper: "h-full",
-            input: "text-small",
-            inputWrapper: "h-full font-normal text-default-500 bg-white",
-          }}
-          value={senderAddrDetails.formatted }
-          placeholder="Sender Address..."
-          size="smS"
-          startContent={<SearchIcon size={18} />}
-          type="search"
-        />
-        <Input
-        className='mt-2'
-        value={receiverAddrDetails.formatted}
 
-          classNames={{
-            base: "max-w-full sm:max-w-[10rem] h-10",
-            mainWrapper: "h-full",
-            input: "text-small",
-            inputWrapper: "h-full font-normal text-default-500 bg-white",
-          }}
-          placeholder="Receiver Address..."
-          size="sm"
-          startContent={<SearchIcon size={18} />}
-          type="search"
-        />
-            <Input
-        className='mt-2'
-        value={100 + 60 * (getDistance(
-          { latitude: senderCoords.lat, longitude: senderCoords.lng },
-          { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
-      )/1000) + 10 * (shipmentDetails.weight)}
-
-          classNames={{
-            base: "max-w-full sm:max-w-[10rem] h-10",
-            mainWrapper: "h-full",
-            input: "text-small",
-            inputWrapper: "h-full font-normal text-default-500 bg-white",
-          }}
-          placeholder="Price"
-          size="sm"
-          type="search"
-        />
-       
-        <Button className='bg-white mt-2' onClick={()=>handleDiv()}>Proceed</Button><br/>
-      </div>
-    )
-  }
   if (loadError) {
     return <div>Map cannot be loaded right now, sorry.</div>
   }else if(isLoaded){

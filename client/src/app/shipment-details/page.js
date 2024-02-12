@@ -7,6 +7,7 @@ import {
 import Layout from "@/components/layout/page";
 import React, { useState, useEffect } from "react";
 import Map from '@/components/map/page'
+import ShipmentInfo from '@/components/shipmentForm/page'
 import {
   Select,
   SelectSection,
@@ -19,7 +20,7 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-import { FaFileAlt, FaBox } from "react-icons/fa";
+
 import { useDispatch, useSelector } from "react-redux";
 import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
@@ -49,7 +50,8 @@ const ShipmentDetails = () => {
   const [parcelInput, setParcelInput] = useState("");
  
   const handleOptionSelect = (option) => {
-    setSelectedOption(option === selectedOption ? null : option);
+
+    // setSelectedOption(option === selectedOption ? null : option);
   };
 
   const chargeableWeight = pieces > 0 && weight > 0 ? pieces * weight : 0;
@@ -76,89 +78,7 @@ const ShipmentDetails = () => {
     }
     dispatch(setStep(step + 1));
   };
-  const ShipmentInfo = () => {
-    return (
-      <div className="flex flex-col items-center justify-center">
-        <h1 className="text-3xl mb-4">What is your shipment content?</h1>
-        <div className="mb-4 flex">
-          <div className="mr-4">
-            <button
-              className={`bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded flex items-center ${
-                selectedOption === "documents" ? "bg-green-500" : ""
-              }`}
-              onClick={() => handleOptionSelect("documents")}
-            >
-              <FaFileAlt className="w-6 h-6 mr-2" /> Document(s)
-            </button>
-          </div>
-          <div>
-            <button
-              className={`bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded flex items-center ${
-                selectedOption === "parcel" ? "bg-green-500" : ""
-              }`}
-              onClick={() => handleOptionSelect("parcel")}
-            >
-              <FaBox className="w-6 h-6 mr-2" /> Parcel
-            </button>
-          </div>
-        </div>
-        {selectedOption && (
-          <div className="mb-4">
-            <h2 className="text-xl">You have selected: {selectedOption}</h2>
-            {selectedOption === "parcel" && (
-              <div>
-                <p>Please provide additional information for your parcel:</p>
-                <input
-                  type="text"
-                  placeholder="What's inside parcel ?"
-                  value={parcelInput}
-                  onChange={(e) => setParcelInput(e.target.value)}
-                  className="border rounded px-2 py-1"
-                />
-              </div>
-            )}
-          </div>
-        )}
-        <div className="mb-4">
-          <p>Help us calculate your shipment’s chargeable weight</p>
-          <input
-            type="number"
-            placeholder="Number of Pieces"
-            value={pieces}
-            onChange={(e) => setPieces(Math.max(0, parseInt(e.target.value)))}
-            className="border rounded px-2 py-1 mr-2"
-          />
-          <input
-            type="number"
-            placeholder="Total Gross Weight"
-            value={weight}
-            onChange={(e) => setWeight(Math.max(0, parseInt(e.target.value)))}
-            className="border rounded px-2 py-1 mr-2"
-          />
-          <select
-            value={unit}
-            onChange={(e) => setUnit(e.target.value)}
-            className="border rounded px-2 py-1"
-          >
-            <option value="kg">kg</option>
-            <option value="lb">lb</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <p>
-            Total Chargeable Weight: {chargeableWeight} {unit}
-          </p>
-        </div>
-        <p>
-          Upload:{" "}
-          <input
-            type="file"
-            onChange={(e) => setParcelImg(e.target.files[0])}
-          />
-        </p>
-      </div>
-    );
-  };
+
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -218,7 +138,20 @@ const ShipmentDetails = () => {
       ): (
         <Layout>
         <div>
-          {step == 1 && <ShipmentInfo />}
+          {step == 1 && <ShipmentInfo 
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+          parcelInput={parcelInput}
+          setParcelInput={setParcelInput}
+          pieces={pieces}
+          setPieces={setPieces}
+          weight={weight}
+          setWeight={setWeight}
+          unit={unit}
+          chargeableWeight={chargeableWeight}
+          setUnit={setUnit}
+          setParcelImg={setParcelImg}
+          />}
           {step == 2 && <TimeContactPicker />}
           <br />
           <div className="flex items-center justify-center ">

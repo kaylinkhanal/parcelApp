@@ -2,11 +2,14 @@
 import React , { useState} from 'react'
 import { GoogleMap, Autocomplete, useJsApiLoader ,Marker, MarkerF} from '@react-google-maps/api'
 import styles from './styles.module.css'
-import { Button, Input } from '@nextui-org/react'
+
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux'
 import { setStep, setSenderCoords, setReceiverCoords, setSenderAddr, setReceiverAddr } from '@/redux/reducerSlice/orderSlice'
 import axios from 'axios'
+import { Button, Input,Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
+
+import priceMap from '../../../config/priceMap.json'
 import { getDistance } from 'geolib';
 const libraries =["places"]
 export const SearchIcon = ({
@@ -44,6 +47,9 @@ export const SearchIcon = ({
 );
 
 const LocationInput =()=>{
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
+  const {pricePerUnitKm, basePrice, pricePerUnitKg} = priceMap
   const dispatch = useDispatch()
   const [searchResult ,setSearchResult]= useState([])
   const {step, shipmentDetails, senderCoords, receiverCoords,senderAddr, receiverAddr  } =useSelector(state=> state.order)
@@ -57,8 +63,38 @@ const LocationInput =()=>{
   function onLoad(autocomplete) {
     setSearchResult(autocomplete);
   }
+
+  const distance = getDistance(
+    { latitude: senderCoords.lat, longitude: senderCoords.lng },
+    { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
+)/1000
+  const price = basePrice + pricePerUnitKm * (distance) + pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces)
+
+
+  const confirmOrder =()=>{
+    onOpenChange()
+  }
   return(
     <div>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Confirm Order Details</ModalHeader>
+              <ModalBody>
+                <p> 
+               {JSON.stringify({step, shipmentDetails, senderCoords, receiverCoords,senderAddr, receiverAddr})}
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onPress={onClose}>
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
               <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceChange}>
               <Input
       className='mt-2'
@@ -96,32 +132,24 @@ const LocationInput =()=>{
    
    
 
-      <Input
-      className='mt-2'
-      value={100 + 60 * (getDistance(
-        { latitude: senderCoords.lat, longitude: senderCoords.lng },
-        { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
-    )/1000) + 10 * (shipmentDetails.weight)}
-
-        classNames={{
-          base: "max-w-full sm:max-w-[10rem] h-10",
-          mainWrapper: "h-full",
-          input: "text-small",
-          inputWrapper: "h-full font-normal text-default-500 bg-white",
-        }}
-        placeholder="Price"
-        size="sm"
-        type="search"
-      />
+      <div className='m-2 bg-white p-2' >
+      Price is: NRs. {price}
+      </div>
       
      
-      <Button className='bg-white mt-2' onClick={()=>handleDiv()}>Proceed</Button><br/>
+      <div className='m-2 bg-white p-2' >
+      Distance is:  {distance} km
+      </div>
+      <Button  className={step < 3 ? 'bg-white mt-2': 'bg-orange-300 mt-2'} onClick={confirmOrder}>
+        {step < 3 ? 'Proceed': 'Confirm'}
+        </Button><br/>
     </div>
   )
 }
 
 const Map=()=> {
-  
+  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+
   const dispatch = useDispatch()
   const {step, shipmentDetails, senderCoords, receiverCoords,senderAddrDetails, receiverAddrDetails  } =useSelector(state=> state.order)
   const { isLoaded, loadError } = useJsApiLoader({
@@ -178,6 +206,7 @@ const Map=()=> {
           }}
     >
         <div className={styles.map}>
+      
         <Button onClick={()=> dispatch(setStep(step-1))} className='bg-white'><IoMdArrowRoundBack /></Button><br/>
           <div className='h-2'>
           <Marker

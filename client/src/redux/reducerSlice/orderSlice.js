@@ -1,14 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const defaultNationCords = {
-  lat: 27.700769,
-  lng: 85.300140
-}
 const initialState = {
   shipmentDetails : {},
   senderAddr: '',
   receiverAddr: '',
-  receiverCoords:defaultNationCords,
+  receiverCoords:{},
   senderCoords: {
     lat: 27.800769,
     lng: 85.200140
@@ -67,7 +63,7 @@ export const orderSlice = createSlice({
     setReceiverAddr: (state, action) => {
       return {
         ...state,
-        receiverAddr: action.payload
+        receiverAddr: action.payload,
       }
     },
     addDeliveryTiming: (state, action) => {

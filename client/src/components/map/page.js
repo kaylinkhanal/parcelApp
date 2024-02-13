@@ -67,14 +67,15 @@ const LocationInput = () => {
   const handleSenderChange = () => {
     const placeInfo = senderSearchResult.getPlace();
     const { lat, lng } = placeInfo.geometry.location
-    dispatch(setSenderAddr(placeInfo.formatted_address))
+    console.log(placeInfo)
+    dispatch(setSenderAddr( placeInfo.name || placeInfo.formatted_address))
     dispatch(setSenderCoords({ lat: lat(), lng: lng() }))
   }
 
     const handleReceiverChange = () => {
       const placeInfo = receiverSearchResult.getPlace();
       const { lat, lng } = placeInfo.geometry.location
-      dispatch(setReceiverAddr(placeInfo.formatted_address))
+      dispatch(setReceiverAddr(placeInfo.name || placeInfo.formatted_address))
       dispatch(setReceiverCoords({ lat: lat(), lng: lng() }))
 
     }
@@ -87,11 +88,11 @@ const LocationInput = () => {
       setreceiverSearchResult(autocomplete);
     }
 
-    const distance = getDistance(
+    const distance = receiverCoords.lat ? getDistance(
       { latitude: senderCoords.lat, longitude: senderCoords.lng },
       { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
-    ) / 1000
-    const price = basePrice + pricePerUnitKm * (distance) + pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces)
+    ) / 1000 : 0
+    const price = receiverCoords.lat ? basePrice + pricePerUnitKm * (distance) + pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces) : 0
 
 
     const confirmOrder = () => {
@@ -122,6 +123,7 @@ const LocationInput = () => {
         <div className="bg-white rounded-xl ">
           <Autocomplete onLoad={senderOnLoad} onPlaceChanged={() => handleSenderChange()}>
             <Input
+            
               className='mt-2'
               classNames={{
                 base: "max-w-full sm:max-w-[20rem] h-8 ",

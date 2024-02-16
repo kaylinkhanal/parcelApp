@@ -1,17 +1,17 @@
 'use client'
-import React , { useState} from 'react'
-import { GoogleMap, Autocomplete, useJsApiLoader ,Marker, MarkerF} from '@react-google-maps/api'
+import React, { useState } from 'react'
+import { GoogleMap, Autocomplete, useJsApiLoader, Marker, MarkerF } from '@react-google-maps/api'
 import styles from './styles.module.css'
 
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux'
 import { setStep, setSenderCoords, setReceiverCoords, setSenderAddr, setReceiverAddr } from '@/redux/reducerSlice/orderSlice'
 import axios from 'axios'
-import { Button, Input,Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure} from "@nextui-org/react";
+import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
 
 import priceMap from '../../../config/priceMap.json'
 import { getDistance } from 'geolib';
-const libraries =["places"]
+const libraries = ["places"]
 export const SearchIcon = ({
   size = 24,
   strokeWidth = 1.5,
@@ -46,36 +46,75 @@ export const SearchIcon = ({
   </svg>
 );
 
-const LocationInput =()=>{
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+const LocationInput = () => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const {pricePerUnitKm, basePrice, pricePerUnitKg} = priceMap
+  const { pricePerUnitKm, basePrice, pricePerUnitKg } = priceMap
   const dispatch = useDispatch()
-  const [searchResult ,setSearchResult]= useState([])
-  const {step, shipmentDetails, senderCoords, receiverCoords,senderAddr, receiverAddr, deliveryTiming  } =useSelector(state=> state.order)
-  const handlePlaceChange = ()=> {
-    const placeInfo = searchResult.getPlace();
-    const  {lat, lng} = placeInfo.geometry.location
-    dispatch(setReceiverAddr( placeInfo.formatted_address))
-    dispatch(setReceiverCoords({lat: lat(), lng:lng()}))
+  const [senderSearchResult, setsenderSearchResult] = useState([])
+  const [receiverSearchResult, setreceiverSearchResult] = useState([])
+  const { step,  receiverId, orderImage, shipmentDetails, deliveryTiming,senderCoords, receiverCoords, senderAddr, receiverAddr } = useSelector(state => state.order)
+
+  //   const handlePlaceChange = () => {
+  //     if (searchResult && typeof searchResult.getPlace === 'function') {
+  //       debugger
+  //         const placeInfo = searchResult?.getPlace();
+  //         const { lat, lng } = placeInfo.geometry.location;
+  //         dispatch(setSenderAddr(placeInfo.formatted_address));
+  //         dispatch(setSenderCoords({lat: lat(),lng: lng() }));
+  //     }else {console.log("error")}
+  // };
+  const handleSenderChange = () => {
+    const placeInfo = senderSearchResult.getPlace();
+    const { lat, lng } = placeInfo.geometry.location
+    console.log(placeInfo)
+    dispatch(setSenderAddr( placeInfo.name || placeInfo.formatted_address))
+    dispatch(setSenderCoords({ lat: lat(), lng: lng() }))
   }
 
-  function onLoad(autocomplete) {
-    setSearchResult(autocomplete);
-  }
+    const handleReceiverChange = () => {
+      const placeInfo = receiverSearchResult.getPlace();
+      const { lat, lng } = placeInfo.geometry.location
+      dispatch(setReceiverAddr(placeInfo.name || placeInfo.formatted_address))
+      dispatch(setReceiverCoords({ lat: lat(), lng: lng() }))
 
-  const distance = getDistance(
-    { latitude: senderCoords.lat, longitude: senderCoords.lng },
-    { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
-)/1000
-  const price = basePrice + pricePerUnitKm * (distance) + pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces)
+    }
 
 
-  const confirmOrder =()=>{
-    onOpenChange()
-  }
-  return(
-    <div>
+    function senderOnLoad(autocomplete) {
+      setsenderSearchResult(autocomplete);
+    }
+    function receiverOnLoad(autocomplete) {
+      setreceiverSearchResult(autocomplete);
+    }
+
+    const distance = receiverCoords.lat ? getDistance(
+      { latitude: senderCoords.lat, longitude: senderCoords.lng },
+      { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
+    ) / 1000 : 0
+    const price = receiverCoords.lat ? basePrice + pricePerUnitKm * (distance) + pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces) : 0
+
+
+    const confirmOrder = () => {
+      onOpenChange()
+    }
+
+    const finalConfirmation =async ()=> {
+      debugger;
+      const formData = new FormData()
+      const orderDetails = { step,receiverId, orderImage, shipmentDetails:JSON.stringify(shipmentDetails), deliveryTiming:JSON.stringify(deliveryTiming),senderCoords:JSON.stringify(senderCoords), receiverCoords:JSON.stringify(receiverCoords), senderAddr, receiverAddr}
+
+      for(let item in orderDetails){
+        formData.append(item, orderDetails[item] )
+      }
+
+      const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/orders/`,{
+        method: 'POST',
+        body:formData
+      })
+    }
+    return (
+      <div>
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -137,7 +176,7 @@ const LocationInput =()=>{
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" onPress={onClose}>
+                <Button color="primary" onPress={finalConfirmation}>
                   Confirm
                 </Button>
               </ModalFooter>
@@ -145,146 +184,155 @@ const LocationInput =()=>{
           )}
         </ModalContent>
       </Modal>
-              <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceChange}>
-              <Input
-      className='mt-2'
-        classNames={{
-          base: "max-w-full sm:max-w-[10rem] h-10",
-          mainWrapper: "h-full",
-          input: "text-small",
-          inputWrapper: "h-full font-normal text-default-500 bg-white",
-        }}
-        value={senderAddr }
-        placeholder="Sender Address..."
-        onChange={(e)=>  dispatch(setSenderAddr( e.target.value))}
-        size="smS"
-        startContent={<SearchIcon size={18} />}
-        type="search"
-      />
-              </Autocomplete>
-              <Autocomplete onLoad={onLoad} onPlaceChanged={handlePlaceChange}>
-              <Input
-      className='mt-2'
-        classNames={{
-          base: "max-w-full sm:max-w-[10rem] h-10",
-          mainWrapper: "h-full",
-          input: "text-small",
-          inputWrapper: "h-full font-normal text-default-500 bg-white",
-        }}
-        value={receiverAddr }
-        placeholder="Receiver Address..."
-        onChange={(e)=>  dispatch(setReceiverAddr( e.target.value))}
-        size="smS"
-        startContent={<SearchIcon size={18} />}
-        type="search"
-      />
-              </Autocomplete>
-   
-   
-
-      <div className='m-2 bg-white p-2' >
-      Price is: NRs. {price}
-      </div>
       
-     
-      <div className='m-2 bg-white p-2' >
-      Distance is:  {distance} km
-      </div>
-      <Button  className={step < 3 ? 'bg-white mt-2': 'bg-orange-300 mt-2'} onClick={confirmOrder}>
-        {step < 3 ? 'Proceed': 'Confirm'}
-        </Button><br/>
-    </div>
-  )
-}
+   
 
-const Map=()=> {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
-  const dispatch = useDispatch()
-  const {step, shipmentDetails, senderCoords, receiverCoords,senderAddrDetails, receiverAddrDetails  } =useSelector(state=> state.order)
-  const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
-    libraries
-  })
-  const [open, setopen] = useState(false)
-  const handleDiv=()=>{
-    setopen(!open)
-    console.log(open)
-  }
-
-  const dragSender = async(e)=>{
-    setopen(true)
-    const senderCoords = {
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    }
-    const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
-    const {formatted} = data.results[0]
-    dispatch(setSenderAddr(formatted))
-    dispatch(setSenderCoords(senderCoords))
-  }
-
-  const dragReceiver =async(e)=>{
-    setopen(true)
-    const receiverCoords ={
-     lat: e.latLng.lat(),
-     lng: e.latLng.lng()
-    }
-    const {data} = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
-    const {formatted} = data.results[0]
-    dispatch(setReceiverAddr(formatted))
-    dispatch(setReceiverCoords(receiverCoords))
-  }
-
-  if (loadError) {
-    return <div>Map cannot be loaded right now, sorry.</div>
-  }else if(isLoaded){
-    return (<GoogleMap
-        mapContainerStyle={{
-            height: "100vh",
-            width: "100vw"
-          }}
-          zoom={13}
-          center={{
-            lat: 27.700769,
-            lng: 85.300140
-          }}
-          options={{
-            mapTypeControl: false,
-            streetViewControl: false,
+        <div className="bg-white rounded-xl ">
+          <Autocomplete onLoad={senderOnLoad} onPlaceChanged={() => handleSenderChange()}>
+            <Input
             
-          }}
-    >
-        <div className={styles.map}>
-      
-        <Button onClick={()=> dispatch(setStep(step-1))} className='bg-white'><IoMdArrowRoundBack /></Button><br/>
-          <div className='h-2'>
-          <Marker
-          draggable={true}
-          onDragEnd={dragSender}
-          icon={{
-            url: "/sender.png",
-            scaledSize: {width:70, height:100}
-          }}
-          position={senderCoords}
-        />
+              className='mt-2'
+              classNames={{
+                base: "max-w-full sm:max-w-[20rem] h-8 ",
+                mainWrapper: "h-full",
+                input: "text-small",
+                inputWrapper: "h-full font-normal text-default-500 bg-white",
+              }}
+              value={senderAddr}
+              placeholder="Sender Address..."
+              onChange={(e) => dispatch(setSenderAddr(e.target.value))}
+              size="smS"
+              startContent={<SearchIcon size={18} />}
+              type="search"
+            />
+          </Autocomplete>
+          <Autocomplete onLoad={receiverOnLoad} onPlaceChanged={() => handleReceiverChange()}>
+            <Input
+              className='mt-4 '
+              classNames={{
+                base: "max-w-full sm:max-w-[20rem] h-8",
+                mainWrapper: "h-full",
+                input: "text-small",
+                inputWrapper: "h-full font-normal text-default-500 bg-white",
+              }}
+              value={receiverAddr}
+              placeholder="Receiver Address..."
+              onChange={(e) => dispatch(setReceiverAddr(e.target.value))}
+              size="smS"
+              startContent={<SearchIcon size={18} />}
+              type="search"
+            />
+          </Autocomplete>
+
+
+
+          <div className='m-2 bg-white p-2' >
+            Price is: NRs. {price}
           </div>
-       
-        <Marker
-          draggable={true}
-          icon={{
-            url: "/receiver.png",
-            scaledSize: {width:70, height:100}
-          }}
-          onDragEnd	= {dragReceiver}
-          position={receiverCoords}
-        />
-        {open ?<LocationInput/>:<Button className='mt-2' onClick={()=>handleDiv()}>
+
+
+          <div className='m-2 bg-white p-2' >
+            Distance is:  {distance} km
+          </div>
+          <div className="flex justify-center">
+          <Button className={step < 3 ? 'bg-white mt-2' : 'bg-orange-300 my-2 mx-auto '} onClick={confirmOrder}>
+            {step < 3 ? 'Proceed' : 'Confirm'}
+          </Button><br />
+          </div>
           
-          Search pickup/destinaton</Button>}
-        
         </div>
-    </GoogleMap>)
+      </div>
+    )
   }
-}
-export default Map
+
+  const Map = () => {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    const dispatch = useDispatch()
+    const { step, shipmentDetails, senderCoords, receiverCoords, senderAddrDetails, receiverAddrDetails } = useSelector(state => state.order)
+    const { isLoaded, loadError } = useJsApiLoader({
+      googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+      libraries
+    })
+    const [open, setopen] = useState(false)
+    const handleDiv = () => {
+      setopen(!open)
+      console.log(open)
+    }
+
+    const dragSender = async (e) => {
+      setopen(true)
+      const senderCoords = {
+        lat: e.latLng.lat(),
+        lng: e.latLng.lng()
+      }
+      const { data } = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
+      const { formatted } = data.results[0]
+      dispatch(setSenderAddr(formatted))
+      dispatch(setSenderCoords(senderCoords))
+    }
+
+    const dragReceiver = async (e) => {
+      setopen(true)
+      const receiverCoords = {
+        lat: e.latLng.lat(),
+        lng: e.latLng.lng()
+      }
+      const { data } = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.latLng.lat()}&lon=${e.latLng.lng()}&format=json&apiKey=${process.env.NEXT_PUBLIC_GEO_APIFY_KEY}`)
+      const { formatted } = data.results[0]
+      dispatch(setReceiverAddr(formatted))
+      dispatch(setReceiverCoords(receiverCoords))
+    }
+
+    if (loadError) {
+      return <div>Map cannot be loaded right now, sorry.</div>
+    } else if (isLoaded) {
+      return (<GoogleMap
+        mapContainerStyle={{
+          height: "100vh",
+          width: "100vw"
+        }}
+        zoom={13}
+        center={{
+          lat: 27.700769,
+          lng: 85.300140
+        }}
+        options={{
+          mapTypeControl: false,
+          streetViewControl: false,
+
+        }}
+      >
+        <div className={styles.map}>
+
+          <Button onClick={() => dispatch(setStep(step - 1))} className='bg-white'><IoMdArrowRoundBack /></Button><br />
+          <div className='h-2'>
+            <Marker
+              draggable={true}
+              onDragEnd={dragSender}
+              icon={{
+                url: "/sender.png",
+                scaledSize: { width: 70, height: 100 }
+              }}
+              position={senderCoords}
+            />
+          </div>
+
+          <Marker
+            draggable={true}
+            icon={{
+              url: "/receiver.png",
+              scaledSize: { width: 70, height: 100 }
+            }}
+            onDragEnd={dragReceiver}
+            position={receiverCoords}
+          />
+          {open ? <LocationInput /> : <Button className='mt-2' onClick={() => handleDiv()}>
+
+            Search pickup/destinaton</Button>}
+
+        </div>
+      </GoogleMap>)
+    }
+  }
+  export default Map

@@ -2,7 +2,8 @@
 import {
   addShipmentDetails,
   addDeliveryTiming,
-  setStep
+  setStep,
+  setSelectedReceiverId
 } from "@/redux/reducerSlice/orderSlice";
 import Layout from "@/components/layout/page";
 import React, { useState, useEffect } from "react";
@@ -55,7 +56,7 @@ const TimeContactPicker = (props) => {
         <div className="flex grid-cols-2 gap-3 items-center">
           <Select variant="bordered" label="Pick receiver contact" className="max-w-xs">
             {contactList?.map((item) => (
-              <SelectItem onClick={()=>alert(item._id)} key={item._id} value={item.fullName}>
+              <SelectItem onClick={()=>dispatch(setSelectedReceiverId(item._id))} key={item._id} value={item.fullName}>
                 {item.fullName}
               </SelectItem>
             ))}

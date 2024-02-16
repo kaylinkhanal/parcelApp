@@ -1,20 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const defaultNationCords = {
-  lat: 27.700769,
-  lng: 85.300140
-}
 const initialState = {
   shipmentDetails : {},
   senderAddr: '',
   receiverAddr: '',
-  receiverCoords:defaultNationCords,
+  receiverCoords:{},
   senderCoords: {
     lat: 27.800769,
     lng: 85.200140
   },
   receiverId: null,
-  parcelImg: null,
+  orderImage: null,
   deliveryTiming: {},
   step: 1
 }
@@ -34,10 +30,16 @@ export const orderSlice = createSlice({
         step: action.payload
       }
     },
+    setSelectedReceiverId: (state, action) => {
+      return {
+        ...state,
+        receiverId: action.payload
+      }
+    },
     setParcelImg: (state, action) => {
       return {
         ...state,
-        parcelImg: action.payload
+        orderImage: action.payload
       }
     },
     setSenderCoords: (state, action) => {
@@ -61,7 +63,7 @@ export const orderSlice = createSlice({
     setReceiverAddr: (state, action) => {
       return {
         ...state,
-        receiverAddr: action.payload
+        receiverAddr: action.payload,
       }
     },
     addDeliveryTiming: (state, action) => {
@@ -75,5 +77,5 @@ export const orderSlice = createSlice({
     },
 }});
 
-export const { addShipmentDetails,setParcelImg,addDeliveryTiming,setStep, setSenderCoords,setReceiverCoords, setSenderAddr, setReceiverAddr } = orderSlice.actions;
+export const { addShipmentDetails,setParcelImg,addDeliveryTiming,setStep, setSenderCoords,setReceiverCoords, setSenderAddr, setReceiverAddr,setSelectedReceiverId } = orderSlice.actions;
 export default orderSlice.reducer;

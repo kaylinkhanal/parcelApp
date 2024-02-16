@@ -37,10 +37,6 @@ export default function App() {
     return (
       <div className="flex gap-10 items-center">
       <div className="flex gap-x-5 max-w-xl justify-center">
-      <Link href={'/home'} className="font-semibold dark:to-gray-200 hover:text-orange-300">Home</Link>
-      <Link href={'/shipment-details'} className="font-semibold dark:to-gray-200 hover:text-orange-300">Shipment</Link>
-      <Link href={'#'} className="font-semibold dark:to-gray-200 hover:text-orange-300">Track</Link>
-      <Link href={'/contact'} className="font-semibold dark:to-gray-200 hover:text-orange-300">Contact</Link>
       </div>
       <div>
       <Dropdown placement="bottom-end">

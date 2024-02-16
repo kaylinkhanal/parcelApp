@@ -1,51 +1,24 @@
-"use client";
-import React from "react";
+'use client'
+import React from 'react'
 import { MdContactPhone } from "react-icons/md";
 import { Image } from "@nextui-org/react";
-import Layout from "@/components/layout/page";
 import { useRouter } from "next/navigation";
-
 const page = () => {
-  const router = useRouter();
+const router = useRouter();
+
   return (
-    <div>
-      <Layout>
-        <section className="text-gray-600 body-font">
-          <div className="container px-340 py-48 mx-auto">
-            <div className="flex flex-wrap -m-4 text-center">
-              <div
-                onClick={() => {
-                  router.push("/shipment-details")}}
+    <div className="flex flex-wrap -m-4 text-center">
+                 <div
+                onClick={() => router.push("/ongoing")}
                 className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer"
               >
                 <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
-                  <Image
-                    className="mx-24"
-                    src="/shipment.png"
-                    width="70"
-                    height="80"
-                  />
+                  <MdContactPhone className="ml-24" size={80} color="orangered" />
                   <h2 className="title-font font-medium text-3xl text-gray-900 m-2">
-                    Create New Shipment
+                   On Going Orders
                   </h2>
                   <p className="leading-relaxed">
-                    Ship your products easily with ParcelApp.
-                  </p>
-                </div>
-              </div>
-              <div className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer">
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
-                  <Image
-                    className="mx-24"
-                    src="/track.png"
-                    width="80"
-                    height="90"
-                  />
-                  <h2 className="title-font font-medium text-3xl text-gray-900 m-2">
-                    Trace your order
-                  </h2>
-                  <p className="leading-relaxed">
-                    Get Details about the product.
+                    All Pending Orders
                   </p>
                 </div>
               </div>
@@ -66,25 +39,21 @@ const page = () => {
                 </div>
               </div>
               <div
-                onClick={() => router.push("/contact")}
+                onClick={() => router.push("/orders/pending")}
                 className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer"
               >
                 <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
                   <MdContactPhone className="ml-24" size={80} color="orangered" />
                   <h2 className="title-font font-medium text-3xl text-gray-900 m-2">
-                    Add Contact
+                   Pending Orders
                   </h2>
                   <p className="leading-relaxed">
-                    Create your new contact.
+                    All Pending Orders
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-      </Layout>
     </div>
-  );
-};
+  )
+}
 
-export default page;
+export default page

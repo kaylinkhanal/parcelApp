@@ -53,7 +53,7 @@ const LocationInput = () => {
   const dispatch = useDispatch()
   const [senderSearchResult, setsenderSearchResult] = useState([])
   const [receiverSearchResult, setreceiverSearchResult] = useState([])
-  const { step, shipmentDetails, senderCoords, receiverCoords, senderAddr, receiverAddr } = useSelector(state => state.order)
+  const { step,  receiverId, orderImage, shipmentDetails, deliveryTiming,senderCoords, receiverCoords, senderAddr, receiverAddr } = useSelector(state => state.order)
 
   //   const handlePlaceChange = () => {
   //     if (searchResult && typeof searchResult.getPlace === 'function') {
@@ -98,27 +98,94 @@ const LocationInput = () => {
     const confirmOrder = () => {
       onOpenChange()
     }
+
+    const finalConfirmation =async ()=> {
+      debugger;
+      const formData = new FormData()
+      const orderDetails = { step,receiverId, orderImage, shipmentDetails:JSON.stringify(shipmentDetails), deliveryTiming:JSON.stringify(deliveryTiming),senderCoords:JSON.stringify(senderCoords), receiverCoords:JSON.stringify(receiverCoords), senderAddr, receiverAddr}
+
+      for(let item in orderDetails){
+        formData.append(item, orderDetails[item] )
+      }
+
+      const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/orders/`,{
+        method: 'POST',
+        body:formData
+      })
+    }
     return (
       <div>
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">Confirm Order Details</ModalHeader>
-                <ModalBody>
-                  <p>
-                    {JSON.stringify({ step, shipmentDetails, senderCoords, receiverCoords, senderAddr, receiverAddr })}
-                  </p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="primary" onPress={onClose}>
-                    Confirm
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Confirm Order Details</ModalHeader>
+              <ModalBody>
+                <div className='container mx-auto '>
+                  <div className='section mb-2'>
+                    <h2 className='section-title text-lg font-semibold mb-2'>Shipment Details</h2>
+                    <div className='grid grid-cols-2 gap-2'>
+                      <div>
+                        <p className='text-base font-semibold'>Item type:</p>
+                        <p className='text-base'>{shipmentDetails.selectedOption}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Pieces:</p>
+                        <p className='text-base'>{shipmentDetails.pieces}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Weight:</p>
+                        <p className='text-base'>{shipmentDetails.weight} {shipmentDetails.unit}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='section mb-2'>
+                    <h2 className='section-title text-lg font-semibold mb-2'>Addresses & Dates</h2>
+                    <div className='grid grid-cols-2 gap-2'>
+                      <div>
+                        <p className='text-base font-semibold'>Sender address:</p>
+                        <p className='text-base'>{senderAddr}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Receiver address:</p>
+                        <p className='text-base'>{receiverAddr}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Pickup date:</p>
+                        <p className='text-base'>{deliveryTiming.pickupDate}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Delivery date:</p>
+                        <p className='text-base'>{deliveryTiming.deliveryDate}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className='section'>
+                    <h2 className='section-title text-lg font-semibold mb-2'>Charges & Distance</h2>
+                    <div className='grid grid-cols-2 gap-2'>
+                      <div>
+                        <p className='text-base font-semibold'>Total charge:</p>
+                        <p className='text-base'>NPR. {price}</p>
+                      </div>
+                      <div>
+                        <p className='text-base font-semibold'>Total distance:</p>
+                        <p className='text-base'>{distance} KM</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onPress={finalConfirmation}>
+                  Confirm
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      
+   
 
         <div className="bg-white rounded-xl ">
           <Autocomplete onLoad={senderOnLoad} onPlaceChanged={() => handleSenderChange()}>

@@ -10,7 +10,7 @@ const initialState = {
     lng: 85.200140
   },
   receiverId: null,
-  parcelImg: null,
+  orderImage: null,
   deliveryTiming: {},
   step: 1
 }
@@ -39,7 +39,7 @@ export const orderSlice = createSlice({
     setParcelImg: (state, action) => {
       return {
         ...state,
-        parcelImg: action.payload
+        orderImage: action.payload
       }
     },
     setSenderCoords: (state, action) => {

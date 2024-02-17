@@ -87,12 +87,15 @@ const LocationInput = () => {
     function receiverOnLoad(autocomplete) {
       setreceiverSearchResult(autocomplete);
     }
+    
+    const receiverLat = receiverCoords?.lat;
+    const receiverLng = receiverCoords?.lng;
 
-    const distance = receiverCoords.lat ? getDistance(
+    const distance = receiverLat ? getDistance(
       { latitude: senderCoords.lat, longitude: senderCoords.lng },
-      { latitude: receiverCoords.lat, longitude: receiverCoords.lng }
+      { latitude: receiverLat, longitude: receiverLng }
     ) / 1000 : 0
-    const price = receiverCoords.lat ? basePrice + pricePerUnitKm * (distance) + pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces) : 0
+    const price = receiverLng ? basePrice + pricePerUnitKm * (distance) + pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces) : 0
 
 
     const confirmOrder = () => {
@@ -100,7 +103,6 @@ const LocationInput = () => {
     }
 
     const finalConfirmation =async ()=> {
-      debugger;
       const formData = new FormData()
       const orderDetails = { step,receiverId, orderImage, shipmentDetails:JSON.stringify(shipmentDetails), deliveryTiming:JSON.stringify(deliveryTiming),senderCoords:JSON.stringify(senderCoords), receiverCoords:JSON.stringify(receiverCoords), senderAddr, receiverAddr}
 

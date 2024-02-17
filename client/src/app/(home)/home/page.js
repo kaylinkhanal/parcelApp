@@ -13,9 +13,9 @@ const router = useRouter();
                   router.push("/shipment-details")}}
                 className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer"
               >
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
                   <Image
-                    className="mx-24"
+                    className="mx-auto"
                     src="/shipment.png"
                     width="70"
                     height="80"
@@ -29,9 +29,9 @@ const router = useRouter();
                 </div>
               </div>
               <div className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer">
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
                   <Image
-                    className="mx-24"
+                    className="mx-auto"
                     src="/track.png"
                     width="80"
                     height="90"
@@ -45,9 +45,9 @@ const router = useRouter();
                 </div>
               </div>
               <div className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer">
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
                   <Image
-                    className="mx-24"
+                    className="mx-auto"
                     src="/history.png"
                     width="70"
                     height="80"
@@ -64,8 +64,8 @@ const router = useRouter();
                 onClick={() => router.push("/contact")}
                 className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer"
               >
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
-                  <MdContactPhone className="ml-24" size={80} color="orangered" />
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
+                  <MdContactPhone className="mx-auto" size={80} color="orangered" />
                   <h2 className="title-font font-medium text-3xl text-gray-900 m-2">
                     Add Contact
                   </h2>

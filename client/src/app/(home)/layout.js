@@ -9,7 +9,7 @@ const page = ({children}) => {
     <div>
       <Layout>
         <section className="text-gray-600 body-font">
-          <div className="container px-340 py-48 mx-auto">
+          <div className="container py-48 mx-auto">
            {children}
           </div>
         </section>

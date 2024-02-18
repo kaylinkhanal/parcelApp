@@ -2,11 +2,17 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
 const orderSchema = new Schema({
-  senderId: String,
+  senderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
   senderCoords: Object,
   senderAddr: String,
   receiverCoords: Object,
-  receiverId: String,
+  receiverId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Contact"
+  },
   orderImage: String,
   receiverAddr: String,
   shipmentDetails: Object,

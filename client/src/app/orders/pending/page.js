@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Layout from "@/components/layout/page";
 import { useSelector } from 'react-redux';
+import { Tooltip } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
 
 
 const page = () => {
@@ -18,8 +20,9 @@ const page = () => {
   const {deliveryTiming} = useSelector((state) => state.order)
 
   const PendingList = (props) => {
+    const router=  useRouter()
     return (
-      <tr className="bg-white hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-800">
+      <tr  onClick={()=> router.push('/orders/'+ props.items._id)} className="bg-white hover:bg-gray-50 dark:bg-slate-900 dark:hover:bg-slate-800">
         <td className="size-px whitespace-nowrap align-top">
           <div className="block p-6">
             <div className="flex items-center gap-x-4">
@@ -34,7 +37,7 @@ const page = () => {
             <div className="flex items-center gap-x-3">
               <div className="grow">
                 <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">Name</span>
-                <span className="block text-sm text-gray-500">email@.com</span>
+                <span className="block text-sm text-gray-500">{props.items?.senderId?.email}</span>
               </div>
             </div>
           </div>
@@ -50,13 +53,19 @@ const page = () => {
         </td>
         <td className="h-px w-20 min-w-20 align-top whitespace-nowrap">
           <div className="block p-6">
-            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{props.items.senderAddr}</span>
+            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{props.items.senderAddr?.slice(0,20)+'...'}</span>
             <span className="block text-sm text-gray-500">Nepal</span>
           </div>
         </td>
         <td className="h-px w-20 whitespace-nowrap min-w-20 align-top">
           <div className="block p-6">
-            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">{props.items.receiverAddr}</span>
+        
+            <Tooltip content={props.items.receiverAddr}>
+            <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200"> 
+             {props.items.receiverAddr?.slice(0,20)+'...'}
+            </span>
+              </Tooltip>
+           
             <span className="block text-sm text-gray-500">Nepal</span>
           </div>
         </td>

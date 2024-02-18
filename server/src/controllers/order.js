@@ -12,7 +12,15 @@ const saveOrderDetails = async(req,res)=>{
 
 
 const getAllOrders  =async(req,res)=> {
-   const orders =  await Order.find()
+   const orders =  await Order.find().populate('senderId')
    res.json({orders})
 }
-module.exports= {saveOrderDetails,getAllOrders}
+
+
+const getOrderDetailById  =async(req,res)=> {
+    const ordersDetails =  await Order.findById(req.params.id)
+    res.json({ordersDetails})
+ }
+ 
+
+module.exports= {saveOrderDetails,getAllOrders,getOrderDetailById}

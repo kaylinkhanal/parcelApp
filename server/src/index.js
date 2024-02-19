@@ -3,15 +3,22 @@ const express = require('express')
 const app = express()
 const connection = require('./db/connection')
 const cors = require('cors')
+const path = require('path')
 app.use(cors())
 require('dotenv').config()
 //body parser
 app.use(express.json())
+
+app.use(express.static('uploads'))
+
 connection()
 const userRoute = require('./routes/user')
+const orderRoute = require('./routes/order')
+
 const contactRoute = require('./routes/contact')
 
 app.use(userRoute)
+app.use(orderRoute)
 app.use(contactRoute)
 
 const port = process.env.PORT

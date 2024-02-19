@@ -1,26 +1,21 @@
-"use client";
-import React from "react";
+'use client'
+import React from 'react'
 import { MdContactPhone } from "react-icons/md";
 import { Image } from "@nextui-org/react";
-import Layout from "@/components/layout/page";
 import { useRouter } from "next/navigation";
-
 const page = () => {
-  const router = useRouter();
+const router = useRouter();
+
   return (
-    <div>
-      <Layout>
-        <section className="text-gray-600 body-font">
-          <div className="container px-340 py-48 mx-auto">
-            <div className="flex flex-wrap -m-4 text-center">
-              <div
+    <div className="flex flex-wrap -m-4 text-center">
+           <div
                 onClick={() => {
                   router.push("/shipment-details")}}
                 className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer"
               >
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
                   <Image
-                    className="mx-24"
+                    className="mx-auto"
                     src="/shipment.png"
                     width="70"
                     height="80"
@@ -34,9 +29,9 @@ const page = () => {
                 </div>
               </div>
               <div className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer">
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
                   <Image
-                    className="mx-24"
+                    className="mx-auto"
                     src="/track.png"
                     width="80"
                     height="90"
@@ -50,9 +45,9 @@ const page = () => {
                 </div>
               </div>
               <div className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer">
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
                   <Image
-                    className="mx-24"
+                    className="mx-auto"
                     src="/history.png"
                     width="70"
                     height="80"
@@ -69,8 +64,8 @@ const page = () => {
                 onClick={() => router.push("/contact")}
                 className="p-4 md:w-1/4 sm:w-1/2 w-full cursor-pointer"
               >
-                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg">
-                  <MdContactPhone className="ml-24" size={80} color="orangered" />
+                <div className="border-2 border-gray-200 px-4 py-6 rounded-lg hover:bg-orange-100">
+                  <MdContactPhone className="mx-auto" size={80} color="orangered" />
                   <h2 className="title-font font-medium text-3xl text-gray-900 m-2">
                     Add Contact
                   </h2>
@@ -79,12 +74,8 @@ const page = () => {
                   </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-      </Layout>
     </div>
-  );
-};
+  )
+}
 
-export default page;
+export default page

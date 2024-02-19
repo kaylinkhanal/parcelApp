@@ -4,6 +4,7 @@ const {registerNewUser,loginUser,getAllUsers, changePassword,}  = require('../co
 
 router.post('/register', registerNewUser)
 router.post('/login', loginUser)
-router.get('/users',getAllUsers)
+
+router.get('/users', getAllUsers)
 router.post('/change-password/:id',changePassword)
 module.exports = router

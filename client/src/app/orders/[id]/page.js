@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/page";
+import Image from "next/image";
+import CustomTimeLine from "@/components/timeline/page";
 
 const page = ({ params }) => {
   const [orderDetails, setOrderDetails] = useState({});
@@ -27,6 +29,7 @@ const page = ({ params }) => {
   return (
     <Layout>
       <div className="max-w-2xl mx-auto">
+        <Image src="http://localhost:5000/orders/1707795476040download.jpeg" width={30} height={30} alt="test"/>
         <h1 className="text-3xl font-bold mb-4">Order Details</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-100 p-4 rounded-md">
@@ -61,6 +64,7 @@ const page = ({ params }) => {
             
           </div>
         </div>
+        <CustomTimeLine status={orderDetails?.status}/>
       </div>
     </Layout>
   );

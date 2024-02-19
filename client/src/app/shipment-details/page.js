@@ -123,8 +123,7 @@ const ShipmentDetails = () => {
       pieces,
       weight,
       unit,
-      parcelInput,
-      parcelImg,
+      parcelInput
     };
     dispatch(addShipmentDetails(shipmentDetails));
     //dispatch and call dispatch(addShipmentDetails(shipmentDetails))

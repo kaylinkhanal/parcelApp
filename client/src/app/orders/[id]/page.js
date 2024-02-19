@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/page";
 import Image from "next/image";
 import CustomTimeLine from "@/components/timeline/page";
-
+import { Select,SelectItem } from "@nextui-org/react";
 const page = ({ params }) => {
   const [orderDetails, setOrderDetails] = useState({});
 
@@ -25,12 +25,12 @@ const page = ({ params }) => {
   useEffect(() => {
     fetchOrderDetails();
   }, []);
-
+  const orderStatusList = ['pending','approve','dispatched','pickedUp','delivered']
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto">
-        <Image src="http://localhost:5000/orders/1707795476040download.jpeg" width={30} height={30} alt="test"/>
-        <h1 className="text-3xl font-bold mb-4">Order Details</h1>
+      <div className="container mx-auto my-5">
+        <h1 className="text-3xl font-bold mb-4 ">Order Details</h1>
+        <Image src="http://localhost:5000/orders/1707795476040download.jpeg" className="mb-4"width={150} height={150} alt="test"/>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-100 p-4 rounded-md">
             <h2 className="text-xl font-semibold mb-2">Sender Address:</h2>
@@ -60,11 +60,22 @@ const page = ({ params }) => {
           </div>
           <div className="bg-gray-100 p-4 rounded-md">
           <h2 className="text-xl font-semibold mb-2">Status:</h2>
-            <p>{orderDetails?.status}</p>
-            
+          <Select 
+            placeholder={orderDetails?.status}
+            className="max-w-xs" 
+            >
+              {orderStatusList.map((item,id)=>{
+                if(id>=orderStatusList.indexOf(orderDetails.status))
+                return <SelectItem key={item} value={item}>
+                          {item}
+                        </SelectItem>
+                })}
+            </Select>
+      
           </div>
         </div>
         <CustomTimeLine status={orderDetails?.status}/>
+      
       </div>
     </Layout>
   );

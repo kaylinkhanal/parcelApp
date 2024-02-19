@@ -90,7 +90,9 @@ const SignupForm = () => {
       <Radio value="user">User</Radio>
       <Radio value="rider">Rider</Radio>
     </RadioGroup>
-      <Button className='m-2 bg-orange-300' type="submit">Submit</Button>
+      <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600">
+        submit
+      </Button>
       </div>
     </form>
     </div>

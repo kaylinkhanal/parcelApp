@@ -160,15 +160,19 @@ const LocationInput = () => {
   const receiverLng = receiverCoords?.lng;
 
   const distance = receiverLat
-    ? getDistance(
-        { latitude: senderCoords.lat, longitude: senderCoords.lng },
-        { latitude: receiverLat, longitude: receiverLng }
-      ) / 1000
+    ? (
+        getDistance(
+          { latitude: senderCoords.lat, longitude: senderCoords.lng },
+          { latitude: receiverLat, longitude: receiverLng }
+        ) / 1000
+      ).toFixed(2)
     : 0;
   const price = receiverLng
-    ? basePrice +
-      pricePerUnitKm * distance +
-      pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces)
+    ? Math.round(
+        basePrice +
+          pricePerUnitKm * distance +
+          pricePerUnitKg * (shipmentDetails.weight * shipmentDetails.pieces)
+      )
     : 0;
 
   const confirmOrder = () => {
@@ -453,7 +457,7 @@ const Map = () => {
           <Marker
             draggable={true}
             icon={{
-              url: "/receiver.png",
+              url: "/Receiver.png",
               scaledSize: { width: 70, height: 100 },
             }}
             onDragEnd={dragReceiver}

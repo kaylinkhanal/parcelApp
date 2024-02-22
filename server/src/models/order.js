@@ -18,7 +18,7 @@ const orderSchema = new Schema({
   shipmentDetails: Object,
   status: {
     type: String,
-    enum : ['pending','approve','dispatched','cancelled','pickedUp','delivered'],
+    enum : ['pending','approved','dispatched','cancelled','pickedUp','delivered'],
     default: 'pending'
     },
 });

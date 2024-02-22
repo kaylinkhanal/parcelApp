@@ -16,9 +16,9 @@ Phase 1
 
 Phase 2:
 - Analytics (react charts)
-- Forget password email verification 
 - Payment gateway
 - Generate QR for order details
+//https://api.qrserver.com/v1/create-qr-code/?data=http://localhost:4000/orders&size=100x100
 - Deploy-> vercel and render
 - Google/github 
 

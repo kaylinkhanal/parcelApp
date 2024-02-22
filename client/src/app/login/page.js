@@ -24,6 +24,7 @@ const SignInForm = () => {
   const data = await res.json()
   if(res.status == 200) {
     dispatch(addUserDetails(data))
+    if(data?.userDetails.role === 'rider') return router.push('rider-dashboard')
     router.push('/home')
   } else {
     toast(data.msg)

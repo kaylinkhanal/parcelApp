@@ -1,10 +1,10 @@
 const express = require('express')
 router = express.Router()
-const {saveOrderDetails,getAllOrders,getOrderDetailById}  = require('../controllers/order')
+const {saveOrderDetails,getAllOrders,getOrderDetailById,changeOrderStatus}  = require('../controllers/order')
 const multer  = require('multer')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/orders/')
+      cb(null, 'uploads/order-image/')
     },
     filename: function (req, file, cb) {
       cb(null,Date.now()+file.originalname)
@@ -14,6 +14,7 @@ const storage = multer.diskStorage({
   const upload = multer({ storage: storage })
 router.post('/orders', upload.single('orderImage'), saveOrderDetails)
 router.get('/orders', getAllOrders)
+router.patch('/orders/:id', changeOrderStatus)
 router.get('/orders/:id', getOrderDetailById)
 
 module.exports = router

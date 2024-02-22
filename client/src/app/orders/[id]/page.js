@@ -2,8 +2,17 @@
 import React, { useEffect, useState } from "react";
 import Layout from "@/components/layout/page";
 import Image from "next/image";
-import CustomTimeLine from "@/components/timeline/page";
 
+import CustomTimeLine from "@/components/timeline/page";
+import { Select, SelectItem } from "@nextui-org/react";
+import axios from "axios";
+const orderStatusList = [
+  {title:'pending', description:'Order is awaiting confirmation'},
+  {title:'approved', description:'Order is confirmed'},
+  {title:'pickedUp', description:'Picked it up from senders place'},
+  {title:'dispatched', description:'Order has been sent for delivery'},
+  {title:'delivered', description:'Order delivered to receiver'},
+]
 const page = ({ params }) => {
   const [orderDetails, setOrderDetails] = useState({});
 
@@ -22,14 +31,26 @@ const page = ({ params }) => {
     }
   };
 
+  
+  const statusId = orderStatusList.indexOf(orderDetails.status)
+
+  const changeOrderStatus =async (status)=>{
+    debugger;
+   await axios.patch(`http://localhost:5000/orders/${params.id}`, {
+      status
+    })
+    fetchOrderDetails()
+  }
+
   useEffect(() => {
     fetchOrderDetails();
   }, []);
 
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto">
-        <Image src="http://localhost:5000/orders/1707795476040download.jpeg" width={30} height={30} alt="test"/>
+      <div className="flex m-20">
+      <div className="w-[50%]">
+        <Image src={"http://localhost:5000/order-image/"+orderDetails.orderImage} width={100} height={100} alt="test"/>
         <h1 className="text-3xl font-bold mb-4">Order Details</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-gray-100 p-4 rounded-md">
@@ -58,13 +79,13 @@ const page = ({ params }) => {
               {orderDetails?.shipmentDetails?.parcelInput}
             </p>
           </div>
-          <div className="bg-gray-100 p-4 rounded-md">
-          <h2 className="text-xl font-semibold mb-2">Status:</h2>
-            <p>{orderDetails?.status}</p>
-            
-          </div>
         </div>
-        <CustomTimeLine status={orderDetails?.status}/>
+      </div>
+      <div className="m-20">
+      <CustomTimeLine changeOrderStatus={changeOrderStatus} orderStatusList={orderStatusList} status={orderDetails?.status}/>
+
+      </div>
+     
       </div>
     </Layout>
   );

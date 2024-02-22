@@ -74,6 +74,7 @@ const LocationInput = () => {
   const dispatch = useDispatch();
   const [senderSearchResult, setsenderSearchResult] = useState([]);
   const [receiverSearchResult, setreceiverSearchResult] = useState([]);
+  const {userDetails} = useSelector(state=>state.user)
   const {
     step,
     receiverId,
@@ -191,6 +192,7 @@ const LocationInput = () => {
       receiverCoords: JSON.stringify(receiverCoords),
       senderAddr,
       receiverAddr,
+      senderId: userDetails._id
     };
 
     for (let item in orderDetails) {

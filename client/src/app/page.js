@@ -6,44 +6,21 @@ import {Input, Button} from "@nextui-org/react";
 import { FcCustomerSupport } from "react-icons/fc";
 import { BsBoxSeamFill } from "react-icons/bs";
 import { FcServices } from "react-icons/fc";
-import { useSelector, useDispatch } from 'react-redux'
-import { FaBeer } from 'react-icons/fa';
-import CustomTimeLine from '@/components/timeline/page';
+import { useRouter } from 'next/navigation';
 
-const orderStatusList = [
-  {title:'pending', description:'Order is awaiting confirmation'},
-  {title:'approved', description:'Order is confirmed'},
-  {title:'pickedUp', description:'Picked it up from senders place'},
-  {title:'dispatched', description:'Order has been sent for delivery'},
-  {title:'delivered', description:'Order delivered to receiver'},
-]
+
 const page = () => {
+  const router = useRouter()
   const [orderId , setOrderId] = useState('')
-  const [orderDetails, setOrderDetails] = useState({});
 
-  const fetchOrderDetails = async (orderId) => {
-    try {
-      const res = await fetch(
-        `http://localhost:${process.env.NEXT_PUBLIC_API_URL}/orders/${orderId}`
-      );
-      if (!res.ok) {
-        throw new Error("Failed to fetch order details");
-      }
-      const data = await res.json();
-      setOrderDetails(data.ordersDetails); // Assuming the data structure matches
-    } catch (error) {
-      console.error("Error fetching order details:", error);
-    }
-  };
-
+  
   return (
     <div>
       <Layout>
 
       <div className='p-3 max-w-lg mx-auto flex flex-row gap-1'>
         <Input type="text" label="Enter your order id" value={orderId} onChange={(e)=>setOrderId(e.target.value)}/>
-        <Button color="warning" size='lg' onClick={()=> fetchOrderDetails(orderId)}>TRACK</Button>  
-        <CustomTimeLine  orderStatusList={orderStatusList} status={orderDetails?.status}/>
+        <Button color="warning" size='lg' onClick={()=> router.push(`/track-order`)}>TRACK</Button>  
 
     </div>
       <section className="text-gray-600 body-font">

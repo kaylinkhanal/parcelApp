@@ -1,3 +1,4 @@
+"use client"
 // import { Timeline } from 'antd';
 
 // const CustomTimeLine = ({status,orderStatusList}) => {
@@ -11,13 +12,12 @@
 // export default CustomTimeLine;
 
 
-
 import React, {useEffect, useState} from 'react';
 import { Steps } from 'antd';
 import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
 
 
-const CustomTimeLine = ({status,orderStatusList,changeOrderStatus,disableChange}) => {
+const CustomTimeLine = ({status,orderStatusList,changeOrderStatus,disableChange}) => {  
   const statusLists = orderStatusList.map(item=>item.title)
    const statusId = statusLists.indexOf(status)
    const [current, setCurrent] = useState(statusId);

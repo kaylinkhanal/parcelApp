@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import React from 'react'
 import Footer from '../footer/page'
 import Nav from '../navBar/page'

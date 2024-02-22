@@ -25,7 +25,7 @@ const SignupForm = () => {
   })
   const data = await res.json()
   if(res.status == 200) {
-    router.push('/login')
+    router.push('/login') 
   }
   toast(data.msg)
   

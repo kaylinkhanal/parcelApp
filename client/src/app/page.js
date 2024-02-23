@@ -20,6 +20,7 @@ const orderStatusList = [
 const page = () => {
   const [orderId , setOrderId] = useState('')
   const [orderDetails, setOrderDetails] = useState({});
+  const [timelineStatus, settimelineStatus] = useState(false)
 
   const fetchOrderDetails = async (orderId) => {
     try {
@@ -31,6 +32,7 @@ const page = () => {
       }
       const data = await res.json();
       setOrderDetails(data.ordersDetails); // Assuming the data structure matches
+      settimelineStatus(true)
     } catch (error) {
       console.error("Error fetching order details:", error);
     }
@@ -42,8 +44,11 @@ const page = () => {
 
       <div className='p-3 max-w-lg mx-auto flex flex-row gap-1'>
         <Input type="text" label="Enter your order id" value={orderId} onChange={(e)=>setOrderId(e.target.value)}/>
-        <Button color="warning" size='lg' onClick={()=> fetchOrderDetails(orderId)}>TRACK</Button>  
-        <CustomTimeLine  orderStatusList={orderStatusList} status={orderDetails?.status}/>
+        <Button color="warning" size='lg' onClick={()=> fetchOrderDetails(orderId)}>TRACK</Button> 
+        <div className=''>
+          {timelineStatus && <CustomTimeLine  orderStatusList={orderStatusList} status={orderDetails?.status}/> }
+        </div>
+        
 
     </div>
       <section className="text-gray-600 body-font">

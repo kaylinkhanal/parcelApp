@@ -17,7 +17,7 @@ const saveOrderDetails = async(req,res)=>{
       req.body.shipmentDetails = JSON.parse(req.body.shipmentDetails)
       req.body.orderImage= req.file.filename
       const createdOrder = await Order.create(req.body)
-      res.json({msg: 'Order created successfully' ,orderId: createdOrder._id})
+      res.json({msg: 'Order created successfully' ,orderId: createdOrder})
    }catch(err){
       console.log(err)
    }

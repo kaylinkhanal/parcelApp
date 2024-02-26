@@ -212,7 +212,7 @@ const LocationInput = () => {
       }
     );
     const data =await res.json()
-    socket.emit('orders', data.orderId)
+    socket.emit('orders', data)
   };
 
   return (

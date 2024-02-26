@@ -55,12 +55,13 @@ export default function App() {
   },[])
 
   useEffect(()=>{
-    const existingorders = {...newOrderList}
-    socket.on('new order',(orderId)=>{
-      const newOrder = {...existingorders, [orderId]:orderId }
-      setNewOrderList(newOrder)
+    // const existingorders = {...newOrderList}
+    socket.on('new orders',(orders)=>{
+      setNewOrderList(orders)
+      // const newOrder = {...existingorders, [orderId]:orderId }
+      // setNewOrderList(newOrder)
     })
-  },[newOrderList])
+  },[])
   const dispatch = useDispatch()
   const router = useRouter()
   const { isLoggedIn, userDetails } = useSelector((state) => state.user);
@@ -78,7 +79,10 @@ export default function App() {
     return (
       <div className="flex gap-10 items-center">
       <div className="flex gap-x-5 max-w-xl justify-center">
-      <Badge content={Object.keys(newOrderList).length.toString()} shape="circle" color="danger">
+      <Dropdown placement="bottom-end">
+     
+         <Badge content={Object.keys(newOrderList).length.toString()} shape="circle" color="danger">
+         <DropdownTrigger>
       <Button
         radius="full"
         isIconOnly
@@ -87,7 +91,20 @@ export default function App() {
       >
         <NotificationIcon size={24} />
       </Button>
+      </DropdownTrigger>
     </Badge>
+
+        <DropdownMenu aria-label="Profile Actions" variant="flat">
+          {newOrderList.length>0 ? newOrderList.map((item)=>{
+            return(<DropdownItem key="profile" className="h-14 gap-2">
+          {  item.notificationTitle}
+            </DropdownItem>)
+          }):  "no notifications"}
+     
+        
+        </DropdownMenu>
+      </Dropdown>
+ 
       </div>
       <div>
       <Dropdown placement="bottom-end">

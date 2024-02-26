@@ -15,14 +15,26 @@ Phase 1
 
 
 Phase 2:
-- Analytics (react charts)
+- Analytics (react charts):
+    - rider  month vs order taken   (bar graph)
+    - rider total distance
+    - rider sales vs months
+    - rider -> user revisiting orders
+
+    - users orders count vs month  (line graph)
+    - users orders count vs month  (%parcel %documents)
+
+
 - Payment gateway
 - Generate QR for order details
 //https://api.qrserver.com/v1/create-qr-code/?data=http://localhost:4000/orders&size=100x100
 - Deploy-> vercel and render
-- Google/github 
-
+-> Google/github 
+-> route protext
 
 flow: 
 
 login ---> home 
+
+
+

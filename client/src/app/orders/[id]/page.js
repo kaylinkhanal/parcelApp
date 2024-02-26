@@ -6,6 +6,7 @@ import Image from "next/image";
 import CustomTimeLine from "@/components/timeline/page";
 import { Select, SelectItem } from "@nextui-org/react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 const orderStatusList = [
   {title:'pending', description:'Order is awaiting confirmation'},
   {title:'approved', description:'Order is confirmed'},
@@ -15,7 +16,7 @@ const orderStatusList = [
 ]
 const page = ({ params }) => {
   const [orderDetails, setOrderDetails] = useState({});
-
+  const {userDetails} = useSelector(state=>state.user)
   const fetchOrderDetails = async () => {
     try {
       const res = await fetch(
@@ -35,9 +36,10 @@ const page = ({ params }) => {
   const statusId = orderStatusList.indexOf(orderDetails.status)
 
   const changeOrderStatus =async (status)=>{
-    debugger;
+
    await axios.patch(`http://localhost:5000/orders/${params.id}`, {
-      status
+      status,
+      riderId: userDetails._id
     })
     fetchOrderDetails()
   }

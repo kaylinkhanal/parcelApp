@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 const page = () => {
   const [orders, setOrders] = useState([])
   const fetchPendingOrders = async () => {
-    const { data } = await axios.get(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/orders`);
+    const { data } = await axios.get(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/orders?filterBy=pending`);
     setOrders(data.orders)
   }
   useEffect(() => {

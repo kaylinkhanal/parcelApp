@@ -13,6 +13,11 @@ const orderSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Contact"
   },
+  riderId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  orderPrice: String,
   orderImage: String,
   receiverAddr: String,
   shipmentDetails: Object,
@@ -21,6 +26,8 @@ const orderSchema = new Schema({
     enum : ['pending','approved','dispatched','cancelled','pickedUp','delivered'],
     default: 'pending'
     },
+},{
+  timestamps:true
 });
 
 const Order = mongoose.model('Order', orderSchema);

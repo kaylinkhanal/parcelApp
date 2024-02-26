@@ -30,6 +30,10 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
+import { io } from 'socket.io-client';
+
+
+const socket = io('http://localhost:5000');
 import priceMap from "../../../config/priceMap.json";
 import { getDistance } from "geolib";
 const libraries = ["places"];
@@ -192,7 +196,8 @@ const LocationInput = () => {
       receiverCoords: JSON.stringify(receiverCoords),
       senderAddr,
       receiverAddr,
-      senderId: userDetails._id
+      senderId: userDetails._id,
+      orderPrice: price
     };
 
     for (let item in orderDetails) {
@@ -206,6 +211,8 @@ const LocationInput = () => {
         body: formData,
       }
     );
+    const data =await res.json()
+    socket.emit('orders', data.orderId)
   };
 
   return (

@@ -16,11 +16,13 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
+
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "@/redux/reducerSlice/userSlice";
+import { logout, setReadNotificationsCount,setLastReadDate } from "@/redux/reducerSlice/userSlice";
 import { useRouter } from "next/navigation";
 
 import { io } from 'socket.io-client';
+import axios from "axios";
 
 
 const socket = io('http://localhost:5000');
@@ -49,22 +51,58 @@ const NotificationIcon = ({size, height, width, ...props}) => {
 
 export default function App() {
   const [newOrderList, setNewOrderList]= useState({})
+  const { isLoggedIn,lastReadDate, userDetails,readNotificationCount } = useSelector((state) => state.user);
   useEffect(()=>{
     socket.on('connection')
-
   },[])
 
+
+  const fetchInitialNotifications = async() => {
+    const {data}  = await axios.get('http://localhost:5000/notifications')
+    setNewOrderList(data)
+    let newCounts =0
+    data.forEach((item)=>{
+      const date1 = new Date(item.notificationDateTime)
+      const date2 = new Date(userDetails.lastReadDate)
+     if(date1> date2){
+         newCounts= newCounts +1
+     }
+     })  
+    dispatch(setReadNotificationsCount(newCounts))
+  }
+
+  const handleNotificationChange = async()=> {
+   await axios.patch('http://localhost:5000/notifications-check/'+userDetails._id)
+   dispatch(setReadNotificationsCount(0))
+   const event = new Date();
+   const currentOrderDate = event.toLocaleString()
+   dispatch(setLastReadDate(currentOrderDate))
+  //  dispatch(setReadNotificationsCount(true))
+  }
+
   useEffect(()=>{
+   
+    fetchInitialNotifications()
     // const existingorders = {...newOrderList}
     socket.on('new orders',(orders)=>{
       setNewOrderList(orders)
+      let newCounts = 0
+      debugger;
+      orders.forEach((item)=>{
+        const date1 = new Date(item.notificationDateTime)
+        const date2 = new Date(lastReadDate)
+       if(date1> date2){
+           newCounts= newCounts +1
+       }
+       })  
+      dispatch(setReadNotificationsCount(newCounts))
       // const newOrder = {...existingorders, [orderId]:orderId }
       // setNewOrderList(newOrder)
     })
   },[])
   const dispatch = useDispatch()
   const router = useRouter()
-  const { isLoggedIn, userDetails } = useSelector((state) => state.user);
+
   const handleLogout = ()=>{
     dispatch(logout())
     router.push('/')
@@ -79,10 +117,10 @@ export default function App() {
     return (
       <div className="flex gap-10 items-center">
       <div className="flex gap-x-5 max-w-xl justify-center">
-      <Dropdown placement="bottom-end">
+      <Dropdown  placement="bottom-end">
      
-         <Badge content={Object.keys(newOrderList).length.toString()} shape="circle" color="danger">
-         <DropdownTrigger>
+         <Badge isInvisible={readNotificationCount} content={readNotificationCount} shape="circle" color="danger">
+         <DropdownTrigger onClick={handleNotificationChange}>
       <Button
         radius="full"
         isIconOnly

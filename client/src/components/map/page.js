@@ -186,6 +186,8 @@ const LocationInput = () => {
 
   const finalConfirmation = async () => {
     const formData = new FormData();
+    const event = new Date();
+    const currentOrderDate = event.toLocaleString()
     const orderDetails = {
       step,
       receiverId,
@@ -197,7 +199,8 @@ const LocationInput = () => {
       senderAddr,
       receiverAddr,
       senderId: userDetails._id,
-      orderPrice: price
+      orderPrice: price,
+      orderDate: currentOrderDate
     };
 
     for (let item in orderDetails) {
@@ -212,9 +215,11 @@ const LocationInput = () => {
       }
     );
     const data =await res.json()
+    data.orderDate =currentOrderDate
     socket.emit('orders', data)
   };
 
+  
   return (
     <div>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>

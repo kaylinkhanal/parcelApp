@@ -3,8 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   userDetails:{},
   token:'',
-  isLoggedIn: false
+  isLoggedIn: false,
+  readNotificationCount: false,
+  lastReadDate: null
 }
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -15,15 +18,22 @@ export const userSlice = createSlice({
         ...state,
         userDetails,
         token,
-        isLoggedIn: true
+        isLoggedIn: true,
+        readNotification: userDetails.hasReadNotifications
       }
     },
     logout:(state,action)=>{
      return {
       ...initialState
      }
+    },
+    setLastReadDate: (state,action)=>{
+      state.lastReadDate = action.payload
+     },
+    setReadNotificationsCount: (state,action)=>{
+      state.readNotificationCount = action.payload
     }
 }});
 
-export const { addUserDetails,logout } = userSlice.actions;
+export const { addUserDetails,logout,setReadNotificationsCount,setLastReadDate } = userSlice.actions;
 export default userSlice.reducer;

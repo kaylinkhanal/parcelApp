@@ -7,6 +7,7 @@ const notificationSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Order"
   },
+  notificationDateTime:  {type: String, default: ''}
 }, {
   timestamps: true
 });

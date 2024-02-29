@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 
 const saveOrderDetails = async(req,res)=>{
    try{
-  
+      console.log(req.body)
       req.body.senderCoords= JSON.parse(req.body.senderCoords)
       req.body.receiverCoords= JSON.parse(req.body.receiverCoords)
       req.body.shipmentDetails = JSON.parse(req.body.shipmentDetails)

@@ -138,8 +138,8 @@ export default function App() {
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           {newOrderList.length>0 ? newOrderList.map((item)=>{
             console.log(item)
-            return(<DropdownItem key="profile" className="h-14 gap-2">
-          {  item.notificationTitle}
+            return(<DropdownItem  key="profile" className="h-14 gap-2">
+              <Link href={'/orders/'+ item.orderId}>{item.notificationTitle}</Link>  
             </DropdownItem>)
           }):  "no notifications"}
      

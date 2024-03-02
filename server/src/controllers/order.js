@@ -35,6 +35,15 @@ const getAllOrders  =async(req,res)=> {
 
 }
 
+const getAllOrdersForUserId  =async(req,res)=> {
+   try{
+      const orders =  await Order.find({senderId: req.params.id}).populate('senderId')
+      res.json({orders})
+   }catch(err){
+      console.log(err)
+   }
+
+}
 
 const getOrderDetailById  =async(req,res)=> {
    try{
@@ -85,4 +94,4 @@ const {shipmentDetails, status, _id,senderAddr} = orderDetails
  }
  
 
-module.exports= {saveOrderDetails,getAllOrders,getOrderDetailById,changeOrderStatus}
+module.exports= {saveOrderDetails,getAllOrdersForUserId,getAllOrders,getOrderDetailById,changeOrderStatus}

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect , useState} from "react";
+import React, { useEffect ,  useRef, useState} from "react";
 import {
   Navbar,
   Button,
@@ -50,8 +50,10 @@ const NotificationIcon = ({size, height, width, ...props}) => {
 
 
 export default function App() {
+
   const [newOrderList, setNewOrderList]= useState({})
   const { isLoggedIn,lastReadDate, userDetails,readNotificationCount } = useSelector((state) => state.user);
+  const lastNotificationReadDate = useRef(lastReadDate)
   useEffect(()=>{
     socket.on('connection')
   },[])
@@ -76,6 +78,7 @@ export default function App() {
    dispatch(setReadNotificationsCount(0))
    const event = new Date();
    const currentOrderDate = event.toLocaleString()
+   lastNotificationReadDate.current = currentOrderDate
    dispatch(setLastReadDate(currentOrderDate))
   //  dispatch(setReadNotificationsCount(true))
   }
@@ -90,7 +93,7 @@ export default function App() {
       debugger;
       orders.forEach((item)=>{
         const date1 = new Date(item.notificationDateTime)
-        const date2 = new Date(lastReadDate)
+        const date2 = new Date(lastNotificationReadDate.current)
        if(date1> date2){
            newCounts= newCounts +1
        }
@@ -134,6 +137,7 @@ export default function App() {
 
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           {newOrderList.length>0 ? newOrderList.map((item)=>{
+            console.log(item)
             return(<DropdownItem key="profile" className="h-14 gap-2">
           {  item.notificationTitle}
             </DropdownItem>)

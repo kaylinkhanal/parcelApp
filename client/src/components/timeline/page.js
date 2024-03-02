@@ -15,14 +15,16 @@
 import React, {useEffect, useState} from 'react';
 import { Steps } from 'antd';
 import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 
 
 const CustomTimeLine = ({status,orderStatusList,changeOrderStatus,disableChange}) => {
+  const {userDetails} = useSelector(state=>state.user)
   const statusLists = orderStatusList.map(item=>item.title)
    const statusId = statusLists.indexOf(status)
    const [current, setCurrent] = useState(statusId);
    const onChange = (id) => {
-    if(!disableChange){
+    if(!disableChange && userDetails.role === 'rider'){
       if(statusId < id ){
         changeOrderStatus(statusLists[id])
         setCurrent(id);

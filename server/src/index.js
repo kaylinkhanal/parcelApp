@@ -60,7 +60,6 @@ app.patch('/notifications-check/:userId', async(req,res)=>{
   const user = await User.findById(req.params.userId)
   const event = new Date();
   user.lastReadDate = event.toLocaleString()
-  console.log( event.toLocaleString())
   user.save()
   res.send('ok')
 })

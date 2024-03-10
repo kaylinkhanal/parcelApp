@@ -1,69 +1,109 @@
-
-const express = require('express')
-const app = express()
-
-const { createServer } = require('node:http');
-const server = createServer(app);
+var { ruruHTML } = require("ruru/server")
+const User = require('./models/user')
+var { GraphQLObjectType,GraphQLSchema, GraphQLBoolean,GraphQLList, GraphQLID, GraphQLString,  } = require("graphql")
 
 const connection = require('./db/connection')
-const cors = require('cors')
-const { Server } = require('socket.io');
+var express = require("express")
+var { createHandler } = require("graphql-http/lib/use/express")
 
-const io = new Server(server,{
-  cors: {
-    origin: "*"
+//defining types
+const UserType = new GraphQLObjectType({
+  name: 'user',
+  fields:{
+    id: {type:GraphQLID},
+    phoneNumber: {type:GraphQLString}, 
+    fullName:{type:GraphQLString}, 
+    email:{type:GraphQLString}, 
+    hasReadNotifications: {type:GraphQLBoolean}, 
   }
-});
+})
 
-app.use(cors())
-require('dotenv').config()
-//body parser
-app.use(express.json())
 
-app.use(express.static('uploads'))
+
+//defining queries
+const query = new GraphQLObjectType({
+  name: 'query',
+  fields:{
+    users: {
+      type: new GraphQLList(UserType),
+      resolve(){
+        console.log("Test")
+        return User.find()
+      }
+    },
+    user: {
+      type: UserType,
+      args: {
+        id: {type: GraphQLID}
+      },
+      resolve(_, args){
+        console.log(args.id)
+        return User.findById(args.id)
+      }
+    },
+  }
+})
+
+const mutation = new GraphQLObjectType({
+  name: 'mutation',
+  fields:{
+    deleteUser: {
+      type: UserType,
+      args: {
+        id: {type: GraphQLID}
+      },
+      resolve(_, args){
+        return User.findByIdAndDelete(args.id)
+      }
+    },
+    createUser: {
+      type: UserType,
+      args: {
+        phoneNumber: {type:GraphQLString}, 
+        fullName:{type:GraphQLString}, 
+        email:{type:GraphQLString}, 
+      },
+      resolve(_, args){
+        return User.create(args)
+      }
+    },
+    updateUser: {
+      type: UserType,
+      args: {
+        id: {type: GraphQLID},
+        phoneNumber: {type:GraphQLString}, 
+        fullName:{type:GraphQLString}, 
+        email:{type:GraphQLString}, 
+      },
+      resolve(_, args){
+        const {id, ...otherFields} = args
+        return User.findByIdAndUpdate(args.id, otherFields)
+      }
+    },
+  }
+})
 
 connection()
-const userRoute = require('./routes/user')
-const Notifications = require('./models/notifications')
-const User = require('./models/user')
+var app = express()
+const cors = require('cors')
+app.use(cors())
+app.get("/", (_req, res) => {
+  res.type("html")
+  res.end(ruruHTML({ endpoint: "/graphql" }))
+})
 
 
-const orderRoute = require('./routes/order')
-const contactRoute = require('./routes/contact')
 
-app.use(userRoute)
-app.use(orderRoute)
-app.use(contactRoute)
-
-const port = process.env.PORT
-
-io.on('connection', (socket) => {
-
-  socket.on('orders', async(order)=>{
-    const {shipmentDetails, orderPrice, receiverAddr} = order.orderId
-    Notifications.create({orderId: order.orderId, notificationTitle:shipmentDetails.selectedOption + 'of price '+ orderPrice+' needs to be delivered to '+receiverAddr,  notificationDateTime: order.orderDate })
-    const notifications = await Notifications.find()
-    io.emit('new orders', notifications)
+app.all(
+  "/graphql",
+  createHandler({
+    schema: new GraphQLSchema({query,mutation}),
+    // rootValue: root,
   })
+)
+
+app.listen(4000)
 
 
-});
-
-
-app.get('/notifications', async(req,res)=>{
-  const data = await Notifications.find()
-  return res.json(data)
-})
-
-
-app.patch('/notifications-check/:userId', async(req,res)=>{
-  const user = await User.findById(req.params.userId)
-  const event = new Date();
-  user.lastReadDate = event.toLocaleString()
-  user.save()
-  res.send('ok')
-})
-
-server.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+console.log("Running a GraphQL API server at localhost:4000/graphql")
+// Serve the GraphiQL IDE.

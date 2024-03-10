@@ -25,7 +25,6 @@ const registerNewUser = async(req,res)=>{
 const getAllUsers = async(req,res)=>{
     const data = await User.find()
     res.json({data})
-  
 }
 
 const loginUser = async(req,res)=>{

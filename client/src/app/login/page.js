@@ -1,13 +1,14 @@
 'use client'
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {Input,Button} from "@nextui-org/react";
-import { addUserDetails } from '@/redux/reducerSlice/userSlice';
+import { addUserDetails, loginUser } from '@/redux/reducerSlice/userSlice';
 import {  toast } from 'react-toastify';
 import Layout from '@/components/layout/page'
 import { useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux';
+
 const SignInForm = () => {
   const router = useRouter()
   const dispatch =useDispatch()
@@ -15,23 +16,7 @@ const SignInForm = () => {
    phoneNumber: Yup.string().required('Required'),
  });
  
- const loginUser = async(values)=> {
- const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/login/`,{
-    method: 'POST',
-    headers: {'Content-Type':'application/json' },
-    body: JSON.stringify(values)
-  })
-  const data = await res.json()
-  if(res.status == 200) {
-    dispatch(addUserDetails(data))
-    if(data?.userDetails.role === 'rider') return router.push('rider-dashboard')
-    router.push('/home')
-  } else {
-    toast(data.msg)
 
-  }
-  
- }
   const formik = useFormik({
     initialValues: {
       phoneNumber: '',
@@ -39,7 +24,10 @@ const SignInForm = () => {
     },
     validationSchema:SignInSchema,
     onSubmit: values => {
-      loginUser(values)
+      dispatch(loginUser(values)).then((role)=>{
+        if(role == 'rider') router.push('/rider-dashboard')
+        else router.push('/home')
+      })
     },
   });
 

@@ -3,15 +3,18 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Layout from "@/components/layout/page";
 import { useSelector } from 'react-redux';
-import { Tooltip } from '@nextui-org/react';
+import { Pagination, Tooltip } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 
 
 const page = () => {
   const [orders, setOrders] = useState([])
-  const fetchPendingOrders = async () => {
-    const { data } = await axios.get(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/orders?filterBy=pending`);
+  const [count, setCount] = useState(0)
+
+  const fetchPendingOrders = async (page= 1) => {
+    const { data } = await axios.get(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/orders?filterBy=pending&page=${page}`);
     setOrders(data.orders)
+    setCount(data.orderCount)
   }
   useEffect(() => {
     fetchPendingOrders()
@@ -192,15 +195,7 @@ return (
 
                 <div>
                   <div className="inline-flex gap-x-2">
-                    <button type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                      <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" ><path d="m15 18-6-6 6-6" /></svg>
-                      Prev
-                    </button>
-
-                    <button type="button" className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                      Next
-                      <svg className="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m9 18 6-6-6-6" /></svg>
-                    </button>
+                 <Pagination onChange={(pageNum)=>fetchPendingOrders(pageNum)} total={Math.ceil(count/10)} initialPage={1} />
                   </div>
                 </div>
               </div>

@@ -27,8 +27,10 @@ const saveOrderDetails = async(req,res)=>{
 
 const getAllOrders  =async(req,res)=> {
    try{
-      const orders =  await Order.find({status: req.query.filterBy}).populate('senderId')
-      res.json({orders})
+      const skipCount = (req.query.page -1) * 10 
+      const orderCount =  await Order.find({status: req.query.filterBy}).count()
+      const orders =  await Order.find({status: req.query.filterBy}).populate('senderId').limit(10).skip(skipCount)
+      res.json({orders,orderCount})
    }catch(err){
       console.log(err)
    }

@@ -16,21 +16,20 @@ const SignInForm = () => {
  });
  
  const loginUser = async(values)=> {
- const res=  await fetch(`http://localhost:${process.env.NEXT_PUBLIC_API_URL}/login/`,{
+  const res=  await fetch(`/api/login`,{
     method: 'POST',
     headers: {'Content-Type':'application/json' },
     body: JSON.stringify(values)
   })
   const data = await res.json()
+
   if(res.status == 200) {
     dispatch(addUserDetails(data))
     if(data?.userDetails.role === 'rider') return router.push('rider-dashboard')
     router.push('/home')
   } else {
     toast(data.msg)
-
   }
-  
  }
   const formik = useFormik({
     initialValues: {

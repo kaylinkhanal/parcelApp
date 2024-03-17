@@ -37,6 +37,9 @@ const TimeContactPicker = (props) => {
   const dispatch= useDispatch()
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const {contactList,fetchContacts } = props
+    const {deliveryTiming} = useSelector((state) => state.order)
+   
+    console.log('rrr',deliveryTiming)
   return(
   <div className="flex flex-col items-center">
     <h1 className="font-bold text-xl mb-7">Receiver Details</h1>
@@ -48,7 +51,7 @@ const TimeContactPicker = (props) => {
           </label>
           <RangePicker
             showTime
-            defaultValue={[dayjs('2015-01-01', 'YYYY-MM-DD'),dayjs('2015-01-01', 'YYYY-MM-DD')]} 
+            defaultValue={dispatch[dayjs(deliveryTiming?.pickupDate, 'YYYY-MM-DD'),dayjs(deliveryTiming?.deliveryDate, 'YYYY-MM-DD')]} 
             onChange={(_, dates) => dispatch(addDeliveryTiming(dates))}
           />
         </div>
